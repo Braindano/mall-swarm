@@ -11,5 +11,6 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 public class MallDemoApplication{
 	public static void main(String[] args) {
 		SpringApplication.run(MallDemoApplication.class, args);
+		System.out.println("--------------------------------------------start successful");
 	}
 }

@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.macro.mall.mapper.ActActMapper">
+  <resultMap id="BaseResultMap" type="com.macro.mall.model.ActAct">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="club_id" jdbcType="BIGINT" property="clubId" />
+    <result column="act_name" jdbcType="VARCHAR" property="actName" />
+    <result column="act_pics" jdbcType="VARCHAR" property="actPics" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="address_detail" jdbcType="VARCHAR" property="addressDetail" />
+    <result column="provide_service" jdbcType="VARCHAR" property="provideService" />
+    <result column="latitude" jdbcType="DECIMAL" property="latitude" />
+    <result column="longitude" jdbcType="DECIMAL" property="longitude" />
+    <result column="original_price" jdbcType="DECIMAL" property="originalPrice" />
+    <result column="promotion_price" jdbcType="DECIMAL" property="promotionPrice" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.macro.mall.model.ActAct">
+    <result column="act_detail" jdbcType="LONGVARCHAR" property="actDetail" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, club_id, act_name, act_pics, start_time, end_time, address, address_detail, provide_service, 
+    latitude, longitude, original_price, promotion_price
+  </sql>
+  <sql id="Blob_Column_List">
+    act_detail
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.macro.mall.model.ActActExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from act_act
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.macro.mall.model.ActActExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from act_act
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from act_act
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from act_act
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.macro.mall.model.ActActExample">
+    delete from act_act
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.macro.mall.model.ActAct">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into act_act (club_id, act_name, act_pics, 
+      start_time, end_time, address, 
+      address_detail, provide_service, latitude, 
+      longitude, original_price, promotion_price, 
+      act_detail)
+    values (#{clubId,jdbcType=BIGINT}, #{actName,jdbcType=VARCHAR}, #{actPics,jdbcType=VARCHAR}, 
+      #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{address,jdbcType=VARCHAR}, 
+      #{addressDetail,jdbcType=VARCHAR}, #{provideService,jdbcType=VARCHAR}, #{latitude,jdbcType=DECIMAL}, 
+      #{longitude,jdbcType=DECIMAL}, #{originalPrice,jdbcType=DECIMAL}, #{promotionPrice,jdbcType=DECIMAL}, 
+      #{actDetail,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.macro.mall.model.ActAct">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into act_act
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="clubId != null">
+        club_id,
+      </if>
+      <if test="actName != null">
+        act_name,
+      </if>
+      <if test="actPics != null">
+        act_pics,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="addressDetail != null">
+        address_detail,
+      </if>
+      <if test="provideService != null">
+        provide_service,
+      </if>
+      <if test="latitude != null">
+        latitude,
+      </if>
+      <if test="longitude != null">
+        longitude,
+      </if>
+      <if test="originalPrice != null">
+        original_price,
+      </if>
+      <if test="promotionPrice != null">
+        promotion_price,
+      </if>
+      <if test="actDetail != null">
+        act_detail,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="clubId != null">
+        #{clubId,jdbcType=BIGINT},
+      </if>
+      <if test="actName != null">
+        #{actName,jdbcType=VARCHAR},
+      </if>
+      <if test="actPics != null">
+        #{actPics,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="addressDetail != null">
+        #{addressDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="provideService != null">
+        #{provideService,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null">
+        #{latitude,jdbcType=DECIMAL},
+      </if>
+      <if test="longitude != null">
+        #{longitude,jdbcType=DECIMAL},
+      </if>
+      <if test="originalPrice != null">
+        #{originalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="promotionPrice != null">
+        #{promotionPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="actDetail != null">
+        #{actDetail,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.macro.mall.model.ActActExample" resultType="java.lang.Long">
+    select count(*) from act_act
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update act_act
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.clubId != null">
+        club_id = #{record.clubId,jdbcType=BIGINT},
+      </if>
+      <if test="record.actName != null">
+        act_name = #{record.actName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actPics != null">
+        act_pics = #{record.actPics,jdbcType=VARCHAR},
+      </if>
+      <if test="record.startTime != null">
+        start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endTime != null">
+        end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.address != null">
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addressDetail != null">
+        address_detail = #{record.addressDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.provideService != null">
+        provide_service = #{record.provideService,jdbcType=VARCHAR},
+      </if>
+      <if test="record.latitude != null">
+        latitude = #{record.latitude,jdbcType=DECIMAL},
+      </if>
+      <if test="record.longitude != null">
+        longitude = #{record.longitude,jdbcType=DECIMAL},
+      </if>
+      <if test="record.originalPrice != null">
+        original_price = #{record.originalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.promotionPrice != null">
+        promotion_price = #{record.promotionPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.actDetail != null">
+        act_detail = #{record.actDetail,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update act_act
+    set id = #{record.id,jdbcType=BIGINT},
+      club_id = #{record.clubId,jdbcType=BIGINT},
+      act_name = #{record.actName,jdbcType=VARCHAR},
+      act_pics = #{record.actPics,jdbcType=VARCHAR},
+      start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      address = #{record.address,jdbcType=VARCHAR},
+      address_detail = #{record.addressDetail,jdbcType=VARCHAR},
+      provide_service = #{record.provideService,jdbcType=VARCHAR},
+      latitude = #{record.latitude,jdbcType=DECIMAL},
+      longitude = #{record.longitude,jdbcType=DECIMAL},
+      original_price = #{record.originalPrice,jdbcType=DECIMAL},
+      promotion_price = #{record.promotionPrice,jdbcType=DECIMAL},
+      act_detail = #{record.actDetail,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update act_act
+    set id = #{record.id,jdbcType=BIGINT},
+      club_id = #{record.clubId,jdbcType=BIGINT},
+      act_name = #{record.actName,jdbcType=VARCHAR},
+      act_pics = #{record.actPics,jdbcType=VARCHAR},
+      start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      address = #{record.address,jdbcType=VARCHAR},
+      address_detail = #{record.addressDetail,jdbcType=VARCHAR},
+      provide_service = #{record.provideService,jdbcType=VARCHAR},
+      latitude = #{record.latitude,jdbcType=DECIMAL},
+      longitude = #{record.longitude,jdbcType=DECIMAL},
+      original_price = #{record.originalPrice,jdbcType=DECIMAL},
+      promotion_price = #{record.promotionPrice,jdbcType=DECIMAL}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.macro.mall.model.ActAct">
+    update act_act
+    <set>
+      <if test="clubId != null">
+        club_id = #{clubId,jdbcType=BIGINT},
+      </if>
+      <if test="actName != null">
+        act_name = #{actName,jdbcType=VARCHAR},
+      </if>
+      <if test="actPics != null">
+        act_pics = #{actPics,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="addressDetail != null">
+        address_detail = #{addressDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="provideService != null">
+        provide_service = #{provideService,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null">
+        latitude = #{latitude,jdbcType=DECIMAL},
+      </if>
+      <if test="longitude != null">
+        longitude = #{longitude,jdbcType=DECIMAL},
+      </if>
+      <if test="originalPrice != null">
+        original_price = #{originalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="promotionPrice != null">
+        promotion_price = #{promotionPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="actDetail != null">
+        act_detail = #{actDetail,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.macro.mall.model.ActAct">
+    update act_act
+    set club_id = #{clubId,jdbcType=BIGINT},
+      act_name = #{actName,jdbcType=VARCHAR},
+      act_pics = #{actPics,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      address = #{address,jdbcType=VARCHAR},
+      address_detail = #{addressDetail,jdbcType=VARCHAR},
+      provide_service = #{provideService,jdbcType=VARCHAR},
+      latitude = #{latitude,jdbcType=DECIMAL},
+      longitude = #{longitude,jdbcType=DECIMAL},
+      original_price = #{originalPrice,jdbcType=DECIMAL},
+      promotion_price = #{promotionPrice,jdbcType=DECIMAL},
+      act_detail = #{actDetail,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.macro.mall.model.ActAct">
+    update act_act
+    set club_id = #{clubId,jdbcType=BIGINT},
+      act_name = #{actName,jdbcType=VARCHAR},
+      act_pics = #{actPics,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      address = #{address,jdbcType=VARCHAR},
+      address_detail = #{addressDetail,jdbcType=VARCHAR},
+      provide_service = #{provideService,jdbcType=VARCHAR},
+      latitude = #{latitude,jdbcType=DECIMAL},
+      longitude = #{longitude,jdbcType=DECIMAL},
+      original_price = #{originalPrice,jdbcType=DECIMAL},
+      promotion_price = #{promotionPrice,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
