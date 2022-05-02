@@ -296,6 +296,136 @@ public class ActActExample {
             return (Criteria) this;
         }
 
+        public Criteria andActTypeIdIsNull() {
+            addCriterion("act_type_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeIdIsNotNull() {
+            addCriterion("act_type_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeIdEqualTo(Long value) {
+            addCriterion("act_type_id =", value, "actTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeIdNotEqualTo(Long value) {
+            addCriterion("act_type_id <>", value, "actTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeIdGreaterThan(Long value) {
+            addCriterion("act_type_id >", value, "actTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("act_type_id >=", value, "actTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeIdLessThan(Long value) {
+            addCriterion("act_type_id <", value, "actTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeIdLessThanOrEqualTo(Long value) {
+            addCriterion("act_type_id <=", value, "actTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeIdIn(List<Long> values) {
+            addCriterion("act_type_id in", values, "actTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeIdNotIn(List<Long> values) {
+            addCriterion("act_type_id not in", values, "actTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeIdBetween(Long value1, Long value2) {
+            addCriterion("act_type_id between", value1, value2, "actTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeIdNotBetween(Long value1, Long value2) {
+            addCriterion("act_type_id not between", value1, value2, "actTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeNameIsNull() {
+            addCriterion("act_type_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeNameIsNotNull() {
+            addCriterion("act_type_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeNameEqualTo(String value) {
+            addCriterion("act_type_name =", value, "actTypeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeNameNotEqualTo(String value) {
+            addCriterion("act_type_name <>", value, "actTypeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeNameGreaterThan(String value) {
+            addCriterion("act_type_name >", value, "actTypeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeNameGreaterThanOrEqualTo(String value) {
+            addCriterion("act_type_name >=", value, "actTypeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeNameLessThan(String value) {
+            addCriterion("act_type_name <", value, "actTypeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeNameLessThanOrEqualTo(String value) {
+            addCriterion("act_type_name <=", value, "actTypeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeNameLike(String value) {
+            addCriterion("act_type_name like", value, "actTypeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeNameNotLike(String value) {
+            addCriterion("act_type_name not like", value, "actTypeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeNameIn(List<String> values) {
+            addCriterion("act_type_name in", values, "actTypeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeNameNotIn(List<String> values) {
+            addCriterion("act_type_name not in", values, "actTypeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeNameBetween(String value1, String value2) {
+            addCriterion("act_type_name between", value1, value2, "actTypeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeNameNotBetween(String value1, String value2) {
+            addCriterion("act_type_name not between", value1, value2, "actTypeName");
+            return (Criteria) this;
+        }
+
         public Criteria andActPicsIsNull() {
             addCriterion("act_pics is null");
             return (Criteria) this;

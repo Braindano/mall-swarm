@@ -2,8 +2,10 @@ package com.macro.mall.mapper;
 
 import com.macro.mall.model.ActAct;
 import com.macro.mall.model.ActActExample;
-import java.util.List;
+import com.macro.mall.model.dto.RecActDto;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface ActActMapper {
     long countByExample(ActActExample example);
@@ -33,4 +35,8 @@ public interface ActActMapper {
     int updateByPrimaryKeyWithBLOBs(ActAct record);
 
     int updateByPrimaryKey(ActAct record);
+
+    int updateActTypeName(Long actTypeId, String actTypeName);
+
+    List<RecActDto> listRecAct(Integer recType);
 }

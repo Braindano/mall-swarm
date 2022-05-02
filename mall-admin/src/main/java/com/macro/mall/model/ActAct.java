@@ -1,6 +1,7 @@
 package com.macro.mall.model;
 
 import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -13,6 +14,12 @@ public class ActAct implements Serializable {
 
     @ApiModelProperty(value = "活动名称")
     private String actName;
+
+    @ApiModelProperty(value = "活动类型id")
+    private Long actTypeId;
+
+    @ApiModelProperty(value = "活动类型名称")
+    private String actTypeName;
 
     @ApiModelProperty(value = "画册图片，连产品图片限制为5张，以逗号分割")
     private String actPics;
@@ -71,6 +78,22 @@ public class ActAct implements Serializable {
 
     public void setActName(String actName) {
         this.actName = actName;
+    }
+
+    public Long getActTypeId() {
+        return actTypeId;
+    }
+
+    public void setActTypeId(Long actTypeId) {
+        this.actTypeId = actTypeId;
+    }
+
+    public String getActTypeName() {
+        return actTypeName;
+    }
+
+    public void setActTypeName(String actTypeName) {
+        this.actTypeName = actTypeName;
     }
 
     public String getActPics() {
@@ -170,6 +193,8 @@ public class ActAct implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", clubId=").append(clubId);
         sb.append(", actName=").append(actName);
+        sb.append(", actTypeId=").append(actTypeId);
+        sb.append(", actTypeName=").append(actTypeName);
         sb.append(", actPics=").append(actPics);
         sb.append(", startTime=").append(startTime);
         sb.append(", endTime=").append(endTime);
