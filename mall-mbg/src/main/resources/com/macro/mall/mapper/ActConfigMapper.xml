@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.macro.mall.model.ActConfig">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="config_code" jdbcType="VARCHAR" property="configCode" />
+    <result column="config_value" jdbcType="VARCHAR" property="configValue" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.macro.mall.model.ActConfig">
     <result column="config_value" jdbcType="LONGVARCHAR" property="configValue" />
@@ -67,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, config_code
+    id, config_code, config_value
   </sql>
   <sql id="Blob_Column_List">
     config_value
@@ -155,7 +156,8 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map">
+
+    <update id="updateByExampleSelective" parameterType="map">
     update act_config
     <set>
       <if test="record.id != null">
@@ -212,4 +214,10 @@
     set config_code = #{configCode,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="getByConfigCode" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from act_config
+    where config_code = #{configCode}
+  </select>
 </mapper>

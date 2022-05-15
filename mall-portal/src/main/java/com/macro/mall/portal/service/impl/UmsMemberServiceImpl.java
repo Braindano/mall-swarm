@@ -5,6 +5,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.BCrypt;
 import cn.hutool.json.JSONUtil;
+import com.alibaba.nacos.common.util.UuidUtils;
 import com.macro.mall.common.api.CommonResult;
 import com.macro.mall.common.api.ResultCode;
 import com.macro.mall.common.constant.AuthConstant;
@@ -16,6 +17,9 @@ import com.macro.mall.model.UmsMember;
 import com.macro.mall.model.UmsMemberExample;
 import com.macro.mall.model.UmsMemberLevel;
 import com.macro.mall.model.UmsMemberLevelExample;
+import com.macro.mall.portal.dao.UmsMemberWxDao;
+import com.macro.mall.portal.domain.UmsMemberWx;
+import com.macro.mall.portal.domain.UserInfo;
 import com.macro.mall.portal.service.AuthService;
 import com.macro.mall.portal.service.UmsMemberCacheService;
 import com.macro.mall.portal.service.UmsMemberService;
@@ -25,9 +29,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
@@ -38,9 +44,9 @@ import java.util.*;
 @Service
 public class UmsMemberServiceImpl implements UmsMemberService {
     private static final Logger LOGGER = LoggerFactory.getLogger(UmsMemberServiceImpl.class);
-    @Autowired
+    @Resource
     private UmsMemberMapper memberMapper;
-    @Autowired
+    @Resource
     private UmsMemberLevelMapper memberLevelMapper;
     @Autowired
     private UmsMemberCacheService memberCacheService;
@@ -52,6 +58,9 @@ public class UmsMemberServiceImpl implements UmsMemberService {
     private AuthService authService;
     @Autowired
     private HttpServletRequest request;
+
+    @Resource
+    private UmsMemberWxDao umsMemberWxDao;
 
     @Override
     public UmsMember getByUsername(String username) {
@@ -99,6 +108,45 @@ public class UmsMemberServiceImpl implements UmsMemberService {
         }
         memberMapper.insert(umsMember);
         umsMember.setPassword(null);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void registerByWxLogin(UserInfo userInfo, String openId, String sessionKey) {
+        //没有该用户进行添加操作
+        UmsMember umsMember = new UmsMember();
+        umsMember.setUsername(openId);
+        umsMember.setGender(userInfo.getGender());
+        umsMember.setIcon(userInfo.getAvatarUrl());
+        umsMember.setPassword(BCrypt.hashpw(openId));
+        umsMember.setCreateTime(new Date());
+        umsMember.setStatus(1);
+        //获取默认会员等级并设置
+        UmsMemberLevelExample levelExample = new UmsMemberLevelExample();
+        levelExample.createCriteria().andDefaultStatusEqualTo(1);
+        List<UmsMemberLevel> memberLevelList = memberLevelMapper.selectByExample(levelExample);
+        if (!CollectionUtils.isEmpty(memberLevelList)) {
+            umsMember.setMemberLevelId(memberLevelList.get(0).getId());
+        }
+        memberMapper.insert(umsMember);
+        // 关联微信openId
+        UmsMemberWx umsMemberWx = new UmsMemberWx();
+        umsMemberWx.setMemberId(umsMember.getId());
+        umsMemberWx.setOpenId(openId);
+        umsMemberWx.setSessionKey(sessionKey);
+        umsMemberWxDao.insert(umsMemberWx);
+
+        umsMember.setPassword(null);
+    }
+
+    @Override
+    public UmsMemberWx getByOpenId(String openId) {
+        return umsMemberWxDao.selectByOpenId(openId);
+    }
+
+    @Override
+    public Integer updateByOpenId(UmsMemberWx umsMemberWx) {
+        return umsMemberWxDao.updateByOpenId(umsMemberWx);
     }
 
     @Override

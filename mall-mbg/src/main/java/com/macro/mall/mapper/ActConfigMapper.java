@@ -34,4 +34,6 @@ public interface ActConfigMapper {
     int updateByPrimaryKeyWithBLOBs(ActConfig record);
 
     int updateByPrimaryKey(ActConfig record);
+
+    ActConfig getByConfigCode(String configCode);
 }

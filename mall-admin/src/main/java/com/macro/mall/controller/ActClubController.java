@@ -1,8 +1,12 @@
 package com.macro.mall.controller;
 
+import com.alibaba.nacos.api.config.annotation.NacosValue;
 import com.macro.mall.common.api.CommonResult;
+import com.macro.mall.mapper.ActAdminClubMapper;
+import com.macro.mall.model.ActAdminClub;
 import com.macro.mall.model.ActClub;
 import com.macro.mall.service.ActClubService;
+import com.macro.mall.util.AdminClubUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +23,12 @@ import java.util.List;
 public class ActClubController {
     @Resource
     private ActClubService clubService;
+
+    @Resource
+    private ActAdminClubMapper adminClubMapper;
+
+    @Resource
+    private AdminClubUtil adminClubUtil;
 
     @ApiOperation("添加俱乐部")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -53,9 +63,26 @@ public class ActClubController {
     public CommonResult<List<ActClub>> list(@RequestParam(value = "clubName", required = false) String clubName,
                                             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
-
+        adminClubUtil.checkSuperAdmin();
         List<ActClub> actClubs = clubService.listClub(clubName, pageNum, pageSize);
         return CommonResult.success(actClubs);
+    }
+
+    @ApiOperation("俱乐部添加管理员")
+    @RequestMapping(value = "/addClubAdmin", method = RequestMethod.POST)
+    public CommonResult addAdminClub(@RequestBody ActAdminClub actAdminClub) {
+        adminClubUtil.checkSuperAdmin();
+        int add = adminClubMapper.insert(actAdminClub);
+        return CommonResult.success(add);
+    }
+
+    @ApiOperation("俱乐部移除管理员")
+    @RequestMapping(value = "/deleteClubAdmin", method = RequestMethod.POST)
+    public CommonResult deleteAdminClub(@RequestParam(value = "clubId", required = false) Long clubId,
+                            @RequestParam(value = "userId", defaultValue = "1") Long userId) {
+        adminClubUtil.checkSuperAdmin();
+        int add = adminClubMapper.deleteByUserIdClubId(userId, clubId);
+        return CommonResult.success(add);
     }
 
 }

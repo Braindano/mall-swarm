@@ -7,6 +7,7 @@ import com.macro.mall.model.ActRecommend;
 import com.macro.mall.model.dto.RecActDto;
 import com.macro.mall.service.ActRecommendService;
 import com.macro.mall.service.ActService;
+import com.macro.mall.util.AdminClubUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -28,6 +29,9 @@ public class ActController {
 
     @Resource
     private ActRecommendService recommendService;
+
+    @Resource
+    private AdminClubUtil adminClubUtil;
 
     @ApiOperation("添加活动")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -55,7 +59,8 @@ public class ActController {
     public CommonResult<CommonPage<ActAct>> list(@RequestParam(value = "actTypeId", required = false) Long actTypeId,
                                            @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
-        List<ActAct> actActs = actService.listAct(actTypeId, pageNum, pageSize);
+        Long clubId = adminClubUtil.getCurrentAminClubId();
+        List<ActAct> actActs = actService.listAct(clubId, actTypeId, pageNum, pageSize);
         return CommonResult.success(CommonPage.restPage(actActs));
     }
 

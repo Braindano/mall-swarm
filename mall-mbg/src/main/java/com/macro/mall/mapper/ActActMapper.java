@@ -39,4 +39,7 @@ public interface ActActMapper {
     int updateActTypeName(Long actTypeId, String actTypeName);
 
     List<RecActDto> listRecAct(Integer recType);
+
+
+    List<ActAct> listByRecType(Integer recType);
 }

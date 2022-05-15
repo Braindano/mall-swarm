@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.macro.mall.portal.dao.UmsMemberWxDao">
+
+    <resultMap id="BaseResultMap" type="com.macro.mall.portal.domain.UmsMemberWx">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="memberId" column="member_id" jdbcType="BIGINT"/>
+            <result property="openId" column="open_id" jdbcType="VARCHAR"/>
+            <result property="sessionKey" column="session_key" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,member_id, open_id,session_key
+    </sql>
+
+    <select id="selectByOpenId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ums_member_wx
+        where  open_id = #{openId}
+    </select>
+
+    <update id="updateByOpenId" parameterType="com.macro.mall.portal.domain.UmsMemberWx" >
+        update ums_member_wx
+        set session_key = #{sessionKey}
+        where open_id = #{openId}
+    </update>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.macro.mall.portal.domain.UmsMemberWx" useGeneratedKeys="true">
+        insert into ums_member_wx
+        ( id,member_id,open_id,session_key
+        )
+        values (#{id,jdbcType=BIGINT},#{memberId},#{openId,jdbcType=VARCHAR},#{sessionKey,jdbcType=VARCHAR}
+        )
+    </insert>
+
+</mapper>

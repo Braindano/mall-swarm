@@ -14,6 +14,6 @@ public interface ActService {
 
     ActAct selectById(Long id);
 
-    List<ActAct> listAct(Long actTypeId, Integer pageNum, Integer pageSize);
+    List<ActAct> listAct(Long clubId, Long actTypeId, Integer pageNum, Integer pageSize);
 
 }
