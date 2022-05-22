@@ -17,6 +17,10 @@
     <result column="longitude" jdbcType="DECIMAL" property="longitude" />
     <result column="original_price" jdbcType="DECIMAL" property="originalPrice" />
     <result column="promotion_price" jdbcType="DECIMAL" property="promotionPrice" />
+    <result column="max_sale_cnt" jdbcType="INTEGER" property="maxSaleCnt" />
+    <result column="inventory" jdbcType="INTEGER" property="inventory" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.macro.mall.model.ActAct">
     <result column="act_detail" jdbcType="LONGVARCHAR" property="actDetail" />
@@ -81,7 +85,8 @@
   </sql>
   <sql id="Base_Column_List">
     id, club_id, act_name, act_type_id, act_type_name, act_pics, start_time, end_time, 
-    address, address_detail, provide_service, latitude, longitude, original_price, promotion_price
+    address, address_detail, provide_service, latitude, longitude, original_price, promotion_price, 
+    max_sale_cnt, inventory, create_time, update_time
   </sql>
   <sql id="Blob_Column_List">
     act_detail
@@ -142,14 +147,16 @@
       act_type_name, act_pics, start_time, 
       end_time, address, address_detail, 
       provide_service, latitude, longitude, 
-      original_price, promotion_price, act_detail
-      )
+      original_price, promotion_price, max_sale_cnt, 
+      inventory, create_time, update_time, 
+      act_detail)
     values (#{clubId,jdbcType=BIGINT}, #{actName,jdbcType=VARCHAR}, #{actTypeId,jdbcType=BIGINT}, 
       #{actTypeName,jdbcType=VARCHAR}, #{actPics,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, 
       #{endTime,jdbcType=TIMESTAMP}, #{address,jdbcType=VARCHAR}, #{addressDetail,jdbcType=VARCHAR}, 
       #{provideService,jdbcType=VARCHAR}, #{latitude,jdbcType=DECIMAL}, #{longitude,jdbcType=DECIMAL}, 
-      #{originalPrice,jdbcType=DECIMAL}, #{promotionPrice,jdbcType=DECIMAL}, #{actDetail,jdbcType=LONGVARCHAR}
-      )
+      #{originalPrice,jdbcType=DECIMAL}, #{promotionPrice,jdbcType=DECIMAL}, #{maxSaleCnt,jdbcType=INTEGER}, 
+      #{inventory,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{actDetail,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.macro.mall.model.ActAct">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -199,6 +206,18 @@
       <if test="promotionPrice != null">
         promotion_price,
       </if>
+      <if test="maxSaleCnt != null">
+        max_sale_cnt,
+      </if>
+      <if test="inventory != null">
+        inventory,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
       <if test="actDetail != null">
         act_detail,
       </if>
@@ -246,6 +265,18 @@
       <if test="promotionPrice != null">
         #{promotionPrice,jdbcType=DECIMAL},
       </if>
+      <if test="maxSaleCnt != null">
+        #{maxSaleCnt,jdbcType=INTEGER},
+      </if>
+      <if test="inventory != null">
+        #{inventory,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="actDetail != null">
         #{actDetail,jdbcType=LONGVARCHAR},
       </if>
@@ -257,7 +288,6 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-
   <update id="updateByExampleSelective" parameterType="map">
     update act_act
     <set>
@@ -306,6 +336,18 @@
       <if test="record.promotionPrice != null">
         promotion_price = #{record.promotionPrice,jdbcType=DECIMAL},
       </if>
+      <if test="record.maxSaleCnt != null">
+        max_sale_cnt = #{record.maxSaleCnt,jdbcType=INTEGER},
+      </if>
+      <if test="record.inventory != null">
+        inventory = #{record.inventory,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="record.actDetail != null">
         act_detail = #{record.actDetail,jdbcType=LONGVARCHAR},
       </if>
@@ -331,6 +373,10 @@
       longitude = #{record.longitude,jdbcType=DECIMAL},
       original_price = #{record.originalPrice,jdbcType=DECIMAL},
       promotion_price = #{record.promotionPrice,jdbcType=DECIMAL},
+      max_sale_cnt = #{record.maxSaleCnt,jdbcType=INTEGER},
+      inventory = #{record.inventory,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       act_detail = #{record.actDetail,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -352,7 +398,11 @@
       latitude = #{record.latitude,jdbcType=DECIMAL},
       longitude = #{record.longitude,jdbcType=DECIMAL},
       original_price = #{record.originalPrice,jdbcType=DECIMAL},
-      promotion_price = #{record.promotionPrice,jdbcType=DECIMAL}
+      promotion_price = #{record.promotionPrice,jdbcType=DECIMAL},
+      max_sale_cnt = #{record.maxSaleCnt,jdbcType=INTEGER},
+      inventory = #{record.inventory,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -402,6 +452,18 @@
       <if test="promotionPrice != null">
         promotion_price = #{promotionPrice,jdbcType=DECIMAL},
       </if>
+      <if test="maxSaleCnt != null">
+        max_sale_cnt = #{maxSaleCnt,jdbcType=INTEGER},
+      </if>
+      <if test="inventory != null">
+        inventory = #{inventory,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="actDetail != null">
         act_detail = #{actDetail,jdbcType=LONGVARCHAR},
       </if>
@@ -424,6 +486,10 @@
       longitude = #{longitude,jdbcType=DECIMAL},
       original_price = #{originalPrice,jdbcType=DECIMAL},
       promotion_price = #{promotionPrice,jdbcType=DECIMAL},
+      max_sale_cnt = #{maxSaleCnt,jdbcType=INTEGER},
+      inventory = #{inventory,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
       act_detail = #{actDetail,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -442,7 +508,11 @@
       latitude = #{latitude,jdbcType=DECIMAL},
       longitude = #{longitude,jdbcType=DECIMAL},
       original_price = #{originalPrice,jdbcType=DECIMAL},
-      promotion_price = #{promotionPrice,jdbcType=DECIMAL}
+      promotion_price = #{promotionPrice,jdbcType=DECIMAL},
+      max_sale_cnt = #{maxSaleCnt,jdbcType=INTEGER},
+      inventory = #{inventory,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
 
@@ -469,6 +539,8 @@
            act.longitude,
            act.original_price,
            act.promotion_price,
+           act.max_sale_cnt,
+           act.inventory,
            rec.rec_type,
            rec.sort
     from act_act act right join act_recommend rec
@@ -477,12 +549,47 @@
     order by sort desc
   </select>
   <select id="listByRecType" resultMap="BaseResultMap">
-    select act.id as id, club_id, act_name, act_type_id, act_type_name, act_pics, start_time, end_time, address, address_detail, provide_service, latitude, longitude, original_price, promotion_price
+    select act.id as id, club_id, act_name, act_type_id, act_type_name, act_pics, start_time, end_time, address,
+           address_detail, provide_service, latitude, longitude, original_price, promotion_price,
+           max_sale_cnt, inventory
     from act_recommend rec
     left join act_act act
         on rec.act_id = act.id
     where rec_type = #{recType}
     order by rec.sort
+  </select>
+  <select id="selectForUpdate" resultType="com.macro.mall.model.ActAct">
+    select <include refid="Base_Column_List"/>
+        from act_act
+    where id = #{actId}
+    for update
+  </select>
+
+  <select id="selectOrderActByUser" resultType="com.macro.mall.model.dto.ActDto">
+    select a.id,
+           a.club_id,
+           a.act_name,
+           a.act_type_id,
+           a.act_type_name,
+           a.act_pics,
+           a.start_time,
+           a.end_time,
+           a.address,
+           a.address_detail,
+           a.provide_service,
+           a.latitude,
+           a.longitude,
+           a.original_price,
+           a.promotion_price
+    from act_order o
+           LEFT JOIN act_order_item oi
+                     on o.id = oi.order_id
+           LEFT JOIN act_act a
+                     on oi.act_id = a.id
+    where o.member_id = #{memberId}
+    and o.status != 5
+    order by o.create_time desc
+
   </select>
 
 </mapper>

@@ -2,6 +2,7 @@ package com.macro.mall.mapper;
 
 import com.macro.mall.model.ActClub;
 import com.macro.mall.model.ActClubExample;
+import com.macro.mall.model.dto.ActClubDto;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -28,4 +29,8 @@ public interface ActClubMapper {
     int updateByPrimaryKeySelective(ActClub record);
 
     int updateByPrimaryKey(ActClub record);
+
+    List<ActClubDto> listByClubIds(List<Long> clubIds);
+
+    List<ActClubDto> listClubActNums(List<Long> clubIds);
 }

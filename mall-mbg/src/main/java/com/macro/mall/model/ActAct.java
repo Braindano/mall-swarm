@@ -1,7 +1,6 @@
 package com.macro.mall.model;
 
 import io.swagger.annotations.ApiModelProperty;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -50,6 +49,18 @@ public class ActAct implements Serializable {
 
     @ApiModelProperty(value = "促销价")
     private BigDecimal promotionPrice;
+
+    @ApiModelProperty(value = "最大售卖数量")
+    private Integer maxSaleCnt;
+
+    @ApiModelProperty(value = "库存")
+    private Integer inventory;
+
+    @ApiModelProperty(value = "创建时间")
+    private Date createTime;
+
+    @ApiModelProperty(value = "修改时间")
+    private Date updateTime;
 
     @ApiModelProperty(value = "活动详情")
     private String actDetail;
@@ -176,6 +187,38 @@ public class ActAct implements Serializable {
         this.promotionPrice = promotionPrice;
     }
 
+    public Integer getMaxSaleCnt() {
+        return maxSaleCnt;
+    }
+
+    public void setMaxSaleCnt(Integer maxSaleCnt) {
+        this.maxSaleCnt = maxSaleCnt;
+    }
+
+    public Integer getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(Integer inventory) {
+        this.inventory = inventory;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
     public String getActDetail() {
         return actDetail;
     }
@@ -205,6 +248,10 @@ public class ActAct implements Serializable {
         sb.append(", longitude=").append(longitude);
         sb.append(", originalPrice=").append(originalPrice);
         sb.append(", promotionPrice=").append(promotionPrice);
+        sb.append(", maxSaleCnt=").append(maxSaleCnt);
+        sb.append(", inventory=").append(inventory);
+        sb.append(", createTime=").append(createTime);
+        sb.append(", updateTime=").append(updateTime);
         sb.append(", actDetail=").append(actDetail);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");

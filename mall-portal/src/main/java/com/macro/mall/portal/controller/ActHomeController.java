@@ -8,9 +8,12 @@ import com.macro.mall.common.api.CommonPage;
 import com.macro.mall.common.api.CommonResult;
 import com.macro.mall.common.config.ActConstants;
 import com.macro.mall.model.ActAct;
+import com.macro.mall.model.ActClub;
+import com.macro.mall.model.dto.ActDto;
 import com.macro.mall.model.dto.Data;
 import com.macro.mall.model.query.ActQuery;
 import com.macro.mall.model.query.RecActQuery;
+import com.macro.mall.portal.domain.act.ActInfoDto;
 import com.macro.mall.portal.feign.ActService;
 import com.macro.mall.portal.service.ActHomeService;
 import io.swagger.annotations.Api;
@@ -74,6 +77,16 @@ public class ActHomeController {
         return CommonResult.success(actList);
     }
 
+    @ApiOperation("按获取活动详情")
+    @RequestMapping(value = "/getActInfo", method = RequestMethod.GET)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "actId", value = "活动id", required=true, dataType = "long", paramType = "query")
+    })
+    @ResponseBody
+    public CommonResult<ActDto> getActInfo(@RequestParam Long actId) {
+        ActDto actDto = actHomeService.getActInfo(actId);
+        return CommonResult.success(actDto);
+    }
 
 
 }

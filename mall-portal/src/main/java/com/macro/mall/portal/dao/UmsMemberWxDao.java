@@ -16,4 +16,6 @@ public interface UmsMemberWxDao {
 
     UmsMemberWx selectByOpenId(String id);
 
+    UmsMemberWx selectByMemberId(Long memberId);
+
 }

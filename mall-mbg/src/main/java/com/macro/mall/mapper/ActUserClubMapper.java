@@ -28,4 +28,6 @@ public interface ActUserClubMapper {
     int updateByPrimaryKeySelective(ActUserClub record);
 
     int updateByPrimaryKey(ActUserClub record);
+
+
 }

@@ -2,7 +2,6 @@ package com.macro.mall.portal.controller;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
-import cn.hutool.json.JSONUtil;
 import com.macro.mall.common.api.CommonResult;
 import com.macro.mall.common.api.ResultCode;
 import com.macro.mall.common.domain.UserDto;
@@ -13,16 +12,11 @@ import com.macro.mall.portal.domain.WxLoginInfo;
 import com.macro.mall.portal.service.UmsMemberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.tomcat.util.http.ResponseUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 会员登录注册管理Controller
@@ -32,8 +26,11 @@ import java.util.Map;
 @Api(tags = "UmsMemberController", description = "会员登录注册管理")
 @RequestMapping("/sso")
 public class UmsMemberController {
-    @Autowired
+    @Resource
     private UmsMemberService memberService;
+
+    @Resource
+    private WxMaService wxService;
 
     @ApiOperation("会员注册")
     @RequestMapping(value = "/register", method = RequestMethod.POST)
@@ -88,8 +85,7 @@ public class UmsMemberController {
     }
 
 
-    @Resource
-    private WxMaService wxService;
+
 
     /**
      * 微信登录
@@ -99,6 +95,7 @@ public class UmsMemberController {
      */
     @ApiOperation("微信登录")
     @PostMapping("/login/wx")
+    @ResponseBody
     public CommonResult loginByWeixin(@RequestBody WxLoginInfo wxLoginInfo, HttpServletRequest request) {
         String code = wxLoginInfo.getCode();
         UserInfo userInfo = wxLoginInfo.getUserInfo();
@@ -128,7 +125,6 @@ public class UmsMemberController {
                 return CommonResult.failed(ResultCode.FAILED, "更新UmsMemberWx数据");
             }
         }
-        CommonResult result = memberService.login(openId, openId);
-        return CommonResult.success(result.getData());
+        return memberService.login(openId, openId);
     }
 }

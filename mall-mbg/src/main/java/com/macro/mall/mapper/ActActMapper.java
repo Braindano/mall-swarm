@@ -2,6 +2,7 @@ package com.macro.mall.mapper;
 
 import com.macro.mall.model.ActAct;
 import com.macro.mall.model.ActActExample;
+import com.macro.mall.model.dto.ActDto;
 import com.macro.mall.model.dto.RecActDto;
 import org.apache.ibatis.annotations.Param;
 
@@ -40,6 +41,11 @@ public interface ActActMapper {
 
     List<RecActDto> listRecAct(Integer recType);
 
-
     List<ActAct> listByRecType(Integer recType);
+
+    ActAct selectForUpdate(Long actId);
+
+    List<ActDto> selectOrderActByUser(Long memberId);
+
+
 }

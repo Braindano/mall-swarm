@@ -256,7 +256,8 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map">
+
+    <update id="updateByExampleSelective" parameterType="map">
     update ums_member
     <set>
       <if test="record.id != null">
@@ -428,4 +429,15 @@
       history_integration = #{historyIntegration,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+
+  <select id="selectByMemberIds" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+        from ums_member
+    where id in
+    <foreach close=")" collection="memberIds" item="memberId" open="(" separator=",">
+      #{memberId}
+    </foreach>
+  </select>
+
 </mapper>

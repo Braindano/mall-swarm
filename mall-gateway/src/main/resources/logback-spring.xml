@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<!-- 读取spring.application.name中的属性来生成日志文件名 -->
+	<springProperty scope="context" name="logName" source="spring.application.name" defaultValue="localhost.log" />
+
+	<!-- 文件输出格式 -->
+	<property name="PATTERN"
+		value="%-12(%d{yyyy-MM-dd HH:mm:ss.SSS}) |-%-5level [%thread] %c [%L] -| %msg%n" />
+
+	<!-- 控制台输出 -->
+	<appender name="CONSOLE"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>${PATTERN}</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 开发环境 -->
+	<springProfile name="dev">
+		<root level="info">
+			<appender-ref ref="CONSOLE" />
+		</root>
+	</springProfile>
+
+	<!-- 生产环境 -->
+	<springProfile name="prod">
+		<appender name="PROD_FILE"
+			class="ch.qos.logback.core.rolling.RollingFileAppender">
+			<file>logs/${logName}/${logName}.log</file>
+			<rollingPolicy
+				class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+				<fileNamePattern>logs/${logName}/${logName}-info.%d{yyyy-MM-dd}.log
+				</fileNamePattern>
+				<MaxHistory>5</MaxHistory>
+			</rollingPolicy>
+			<layout class="ch.qos.logback.classic.PatternLayout">
+				<pattern>${PATTERN}</pattern>
+			</layout>
+		</appender>
+		<root level="info">
+			<appender-ref ref="CONSOLE" />
+			<appender-ref ref="PROD_FILE" />
+		</root>
+	</springProfile>
+</configuration>
