@@ -1,8 +1,10 @@
 package com.macro.mall.portal.service;
 
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
+import com.macro.mall.model.ActAct;
 import com.macro.mall.model.ActOrder;
 import com.macro.mall.model.dto.ActDto;
+import com.macro.mall.model.dto.ActOrderWithItem;
 import com.macro.mall.portal.domain.act.ActConfirmOrderResult;
 import com.macro.mall.portal.domain.act.ActOrderParam;
 
@@ -62,4 +64,19 @@ public interface ActOrderService {
      * @return
      */
     int confirmGet(String orderSn);
+
+    /**
+     * 取消超时订单
+     */
+    Integer cancelTimeOutOrder();
+
+    /**
+     * 获取用户订单记录
+     * @param memberId 用户id
+     * @param orderStatus 订单状态
+     * @return
+     */
+    List<ActOrderWithItem> getOrderByStatus(Long memberId, Integer orderStatus);
+
+    ActAct getActById(Long actId);
 }

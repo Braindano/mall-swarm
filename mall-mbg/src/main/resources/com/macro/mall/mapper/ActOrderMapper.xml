@@ -496,8 +496,114 @@
     FROM
       act_order o
     LEFT JOIN act_order_item oi ON o.id = oi.order_id
-        AND o.STATUS IN (1,2,3,4)
+        AND o.STATUS IN (1,2,3)
     where oi.act_id = #{actId}
   </select>
+
+  <resultMap id="OrderWithItemResultMap" type="com.macro.mall.model.dto.ActOrderWithItem">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="member_id" jdbcType="BIGINT" property="memberId" />
+    <result column="order_sn" jdbcType="VARCHAR" property="orderSn" />
+    <result column="member_username" jdbcType="VARCHAR" property="memberUsername" />
+    <result column="total_amount" jdbcType="DECIMAL" property="totalAmount" />
+    <result column="pay_amount" jdbcType="DECIMAL" property="payAmount" />
+    <result column="promotion_amount" jdbcType="DECIMAL" property="promotionAmount" />
+    <result column="pay_type" jdbcType="INTEGER" property="payType" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="receiver_name" jdbcType="VARCHAR" property="receiverName" />
+    <result column="receiver_phone" jdbcType="VARCHAR" property="receiverPhone" />
+    <result column="receiver_detail_address" jdbcType="VARCHAR" property="receiverDetailAddress" />
+    <result column="confirm_status" jdbcType="INTEGER" property="confirmStatus" />
+    <result column="delete_status" jdbcType="INTEGER" property="deleteStatus" />
+    <result column="payment_time" jdbcType="TIMESTAMP" property="paymentTime" />
+    <result column="delivery_time" jdbcType="TIMESTAMP" property="deliveryTime" />
+    <result column="express_company" jdbcType="VARCHAR" property="expressCompany" />
+    <result column="express_sn" jdbcType="VARCHAR" property="expressSn" />
+    <result column="receive_time" jdbcType="TIMESTAMP" property="receiveTime" />
+    <result column="comment_time" jdbcType="TIMESTAMP" property="commentTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="act_id" jdbcType="TIMESTAMP" property="actId" />
+    <result column="act_name" jdbcType="TIMESTAMP" property="actName" />
+    <result column="club_id" jdbcType="TIMESTAMP" property="clubId" />
+  </resultMap>
+
+  <select id="getTimeOutOrders" resultMap="OrderWithItemResultMap" >
+    select o.id,
+           o.member_id,
+           o.order_sn,
+           o.member_username,
+           o.total_amount,
+           o.pay_amount,
+           o.promotion_amount,
+           o.pay_type,
+           o.status,
+           o.receiver_name,
+           o.receiver_phone,
+           o.receiver_detail_address,
+           o.confirm_status,
+           o.delete_status,
+           o.payment_time,
+           o.delivery_time,
+           o.express_company,
+           o.express_sn,
+           o.receive_time,
+           o.comment_time,
+           o.create_time,
+           o.update_time as updateTime,
+           oi.act_id as act_id,
+           oi.act_name as act_name,
+           oi.club_id as club_id
+    from act_order o
+    left join act_order_item oi
+    on o.id = oi.order_id
+    where o.status = 0
+    AND o.create_time &lt; date_add(NOW(), INTERVAL -#{minute} MINUTE);
+  </select>
+  <select id="getOrderByStatus" resultMap="OrderWithItemResultMap">
+    select o.id,
+           o.member_id,
+           o.order_sn,
+           o.member_username,
+           o.total_amount,
+           o.pay_amount,
+           o.promotion_amount,
+           o.pay_type,
+           o.status,
+           o.receiver_name,
+           o.receiver_phone,
+           o.receiver_detail_address,
+           o.confirm_status,
+           o.delete_status,
+           o.payment_time,
+           o.delivery_time,
+           o.express_company,
+           o.express_sn,
+           o.receive_time,
+           o.comment_time,
+           o.create_time,
+           o.update_time as updateTime,
+           oi.act_id as act_id,
+           oi.act_name as act_name,
+           oi.club_id as club_id
+    from act_order o
+    left join act_order_item oi
+        on o.id = oi.order_id
+    <where>
+      o.member_id = #{memberId}
+      <if test="orderStatus != null">
+        and o.status = #{orderStatus}
+      </if>
+    </where>
+  </select>
+
+  <update id="updateOrderStatus">
+    update act_order
+    set status=#{status}
+    where id in
+    <foreach collection="ids" item="id" separator="," open="(" close=")">
+      #{id}
+    </foreach>
+  </update>
 
 </mapper>

@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.macro.mall.mapper.ActArticleMapper">
+  <resultMap id="BaseResultMap" type="com.macro.mall.model.ActArticle">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.macro.mall.model.ActArticle">
+    <result column="c1" jdbcType="LONGVARCHAR" property="c1" />
+    <result column="c2" jdbcType="LONGVARCHAR" property="c2" />
+    <result column="c3" jdbcType="LONGVARCHAR" property="c3" />
+    <result column="c4" jdbcType="LONGVARCHAR" property="c4" />
+    <result column="c5" jdbcType="LONGVARCHAR" property="c5" />
+    <result column="c6" jdbcType="LONGVARCHAR" property="c6" />
+    <result column="c7" jdbcType="LONGVARCHAR" property="c7" />
+    <result column="c8" jdbcType="LONGVARCHAR" property="c8" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, user_id, title, create_time, update_time
+  </sql>
+  <sql id="Blob_Column_List">
+    c1, c2, c3, c4, c5, c6, c7, c8
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.macro.mall.model.ActArticleExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from act_article
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.macro.mall.model.ActArticleExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from act_article
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from act_article
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from act_article
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.macro.mall.model.ActArticleExample">
+    delete from act_article
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.macro.mall.model.ActArticle">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into act_article (user_id, title, create_time, 
+      update_time, c1, c2, 
+      c3, c4, c5, 
+      c6, c7, c8
+      )
+    values (#{userId,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{c1,jdbcType=LONGVARCHAR}, #{c2,jdbcType=LONGVARCHAR}, 
+      #{c3,jdbcType=LONGVARCHAR}, #{c4,jdbcType=LONGVARCHAR}, #{c5,jdbcType=LONGVARCHAR}, 
+      #{c6,jdbcType=LONGVARCHAR}, #{c7,jdbcType=LONGVARCHAR}, #{c8,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.macro.mall.model.ActArticle">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into act_article
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="c1 != null">
+        c1,
+      </if>
+      <if test="c2 != null">
+        c2,
+      </if>
+      <if test="c3 != null">
+        c3,
+      </if>
+      <if test="c4 != null">
+        c4,
+      </if>
+      <if test="c5 != null">
+        c5,
+      </if>
+      <if test="c6 != null">
+        c6,
+      </if>
+      <if test="c7 != null">
+        c7,
+      </if>
+      <if test="c8 != null">
+        c8,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="c1 != null">
+        #{c1,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="c2 != null">
+        #{c2,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="c3 != null">
+        #{c3,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="c4 != null">
+        #{c4,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="c5 != null">
+        #{c5,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="c6 != null">
+        #{c6,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="c7 != null">
+        #{c7,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="c8 != null">
+        #{c8,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.macro.mall.model.ActArticleExample" resultType="java.lang.Long">
+    select count(*) from act_article
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update act_article
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=BIGINT},
+      </if>
+      <if test="record.title != null">
+        title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.c1 != null">
+        c1 = #{record.c1,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.c2 != null">
+        c2 = #{record.c2,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.c3 != null">
+        c3 = #{record.c3,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.c4 != null">
+        c4 = #{record.c4,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.c5 != null">
+        c5 = #{record.c5,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.c6 != null">
+        c6 = #{record.c6,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.c7 != null">
+        c7 = #{record.c7,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.c8 != null">
+        c8 = #{record.c8,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update act_article
+    set id = #{record.id,jdbcType=BIGINT},
+      user_id = #{record.userId,jdbcType=BIGINT},
+      title = #{record.title,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      c1 = #{record.c1,jdbcType=LONGVARCHAR},
+      c2 = #{record.c2,jdbcType=LONGVARCHAR},
+      c3 = #{record.c3,jdbcType=LONGVARCHAR},
+      c4 = #{record.c4,jdbcType=LONGVARCHAR},
+      c5 = #{record.c5,jdbcType=LONGVARCHAR},
+      c6 = #{record.c6,jdbcType=LONGVARCHAR},
+      c7 = #{record.c7,jdbcType=LONGVARCHAR},
+      c8 = #{record.c8,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update act_article
+    set id = #{record.id,jdbcType=BIGINT},
+      user_id = #{record.userId,jdbcType=BIGINT},
+      title = #{record.title,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.macro.mall.model.ActArticle">
+    update act_article
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="c1 != null">
+        c1 = #{c1,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="c2 != null">
+        c2 = #{c2,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="c3 != null">
+        c3 = #{c3,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="c4 != null">
+        c4 = #{c4,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="c5 != null">
+        c5 = #{c5,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="c6 != null">
+        c6 = #{c6,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="c7 != null">
+        c7 = #{c7,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="c8 != null">
+        c8 = #{c8,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.macro.mall.model.ActArticle">
+    update act_article
+    set user_id = #{userId,jdbcType=BIGINT},
+      title = #{title,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      c1 = #{c1,jdbcType=LONGVARCHAR},
+      c2 = #{c2,jdbcType=LONGVARCHAR},
+      c3 = #{c3,jdbcType=LONGVARCHAR},
+      c4 = #{c4,jdbcType=LONGVARCHAR},
+      c5 = #{c5,jdbcType=LONGVARCHAR},
+      c6 = #{c6,jdbcType=LONGVARCHAR},
+      c7 = #{c7,jdbcType=LONGVARCHAR},
+      c8 = #{c8,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.macro.mall.model.ActArticle">
+    update act_article
+    set user_id = #{userId,jdbcType=BIGINT},
+      title = #{title,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

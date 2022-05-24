@@ -3,6 +3,7 @@ package com.macro.mall.portal.service.impl;
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.service.WxPayService;
+import com.google.common.collect.Lists;
 import com.macro.mall.common.config.ActOrderConstants;
 import com.macro.mall.common.exception.ApiException;
 import com.macro.mall.common.exception.Asserts;
@@ -10,27 +11,30 @@ import com.macro.mall.common.service.RedisService;
 import com.macro.mall.mapper.ActActMapper;
 import com.macro.mall.mapper.ActOrderItemMapper;
 import com.macro.mall.mapper.ActOrderMapper;
+import com.macro.mall.mapper.OmsOrderSettingMapper;
 import com.macro.mall.model.*;
 import com.macro.mall.model.dto.ActDto;
+import com.macro.mall.model.dto.ActOrderWithItem;
 import com.macro.mall.portal.dao.UmsMemberWxDao;
+import com.macro.mall.portal.domain.OmsOrderDetail;
 import com.macro.mall.portal.domain.UmsMemberWx;
 import com.macro.mall.portal.domain.act.ActConfirmOrderResult;
 import com.macro.mall.portal.domain.act.ActOrderParam;
 import com.macro.mall.portal.service.ActOrderService;
 import com.macro.mall.portal.service.UmsMemberService;
 import com.macro.mall.portal.util.IpUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ActOrderServiceImpl implements ActOrderService {
@@ -57,16 +61,18 @@ public class ActOrderServiceImpl implements ActOrderService {
     @Resource
     private WxPayService wxPayService;
 
+    @Resource
+    private OmsOrderSettingMapper orderSettingMapper;
+
     @Value("${redis.key.orderId}")
     private String REDIS_KEY_ORDER_ID;
     @Value("${redis.database}")
     private String REDIS_DATABASE;
 
+
     @Override
     public ActConfirmOrderResult generateConfirmOrder(Long actId) {
         ActConfirmOrderResult result = new ActConfirmOrderResult();
-        UmsMember currentMember = memberService.getCurrentMember();
-        // todo 获取地址列表
 
         ActAct actAct = actMapper.selectByPrimaryKey(actId);
         result.setAct(actAct);
@@ -189,7 +195,7 @@ public class ActOrderServiceImpl implements ActOrderService {
         ActOrderExample.Criteria criteria = example.createCriteria();
         criteria.andMemberIdEqualTo(memberId);
         // 过滤无效订单
-        criteria.andStatusNotEqualTo(5);
+        criteria.andStatusNotIn(Lists.newArrayList(4,5));
         example.setOrderByClause("order by id desc");
         return orderMapper.selectByExample(example);
     }
@@ -218,5 +224,37 @@ public class ActOrderServiceImpl implements ActOrderService {
     @Override
     public int confirmGet(String orderSn) {
         return orderMapper.updateStatusByOrderSn(orderSn, ActOrderConstants.ORDER_COMPLETE);
+    }
+
+    @Override
+    public Integer cancelTimeOutOrder() {
+        System.err.println("--------------------------------------取消过期订单-----------------------------------");
+        Integer count=0;
+        OmsOrderSetting orderSetting = orderSettingMapper.selectByPrimaryKey(1L);
+        //查询超时、未支付的订单及订单详情
+        List<ActOrderWithItem> timeOutOrders = orderMapper.getTimeOutOrders(orderSetting.getNormalOrderOvertime());
+        if (CollectionUtils.isEmpty(timeOutOrders)) {
+            return count;
+        }
+        //修改订单状态为交易取消
+        List<Long> ids = timeOutOrders.stream().map(ActOrder::getId).collect(Collectors.toList());
+        orderMapper.updateOrderStatus(ids, 4);
+        for (ActOrderWithItem order: timeOutOrders) {
+            Long actId = order.getActId();
+            ActAct actAct = actMapper.selectForUpdate(actId);
+            actAct.setInventory(actAct.getInventory() + 1);
+            actMapper.updateByPrimaryKeySelective(actAct);
+        }
+        return count;
+    }
+
+    @Override
+    public List<ActOrderWithItem> getOrderByStatus(Long memberId, Integer orderStatus) {
+        return orderMapper.getOrderByStatus(memberId, orderStatus);
+    }
+
+    @Override
+    public ActAct getActById(Long actId) {
+        return actMapper.selectByPrimaryKey(actId);
     }
 }

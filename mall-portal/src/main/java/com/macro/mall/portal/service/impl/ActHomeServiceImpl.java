@@ -8,7 +8,6 @@ import com.macro.mall.model.*;
 import com.macro.mall.model.dto.ActClubDto;
 import com.macro.mall.model.dto.ActDto;
 import com.macro.mall.model.query.ActQuery;
-import com.macro.mall.model.query.RecActQuery;
 import com.macro.mall.portal.service.ActHomeService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -38,6 +37,9 @@ public class ActHomeServiceImpl implements ActHomeService {
 
     @Resource
     private UmsMemberMapper memberMapper;
+
+    @Resource
+    private ActArticleMapper articleMapper;
 
     @Override
     public List<ActAct> getActList(ActQuery query) {
@@ -87,6 +89,15 @@ public class ActHomeServiceImpl implements ActHomeService {
     }
 
     @Override
+    public List<UmsMember> getActMembers(Long actId) {
+        List<Long> memberIds = orderMapper.getMemberIdByActId(actId);
+        if (CollectionUtils.isEmpty(memberIds)) {
+            return new ArrayList<>();
+        }
+        return memberMapper.selectByMemberIds(memberIds);
+    }
+
+    @Override
     public String getConfig(String configCode) {
         ActConfig config = configMapper.getByConfigCode(configCode);
         return config.getConfigValue();
@@ -108,5 +119,10 @@ public class ActHomeServiceImpl implements ActHomeService {
         Map<Long, Integer> clubActNumsMap = clubActNums.stream().collect(Collectors.toMap(ActClubDto::getId, ActClubDto::getActCnt));
         actClubDtoList.forEach(actClubDto -> actClubDto.setActCnt(clubActNumsMap.get(actClubDto.getId())));
         return actClubDtoList;
+    }
+
+    @Override
+    public ActArticle getArticleById(Long articleId) {
+        return articleMapper.selectByPrimaryKey(articleId);
     }
 }

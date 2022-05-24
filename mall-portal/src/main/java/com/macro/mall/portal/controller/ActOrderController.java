@@ -4,6 +4,8 @@ package com.macro.mall.portal.controller;
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.macro.mall.common.api.CommonResult;
 import com.macro.mall.model.UmsMember;
+import com.macro.mall.model.dto.ActOrderInfoDto;
+import com.macro.mall.model.dto.ActOrderWithItem;
 import com.macro.mall.portal.domain.act.ActConfirmOrderResult;
 import com.macro.mall.portal.domain.act.ActOrderParam;
 import com.macro.mall.portal.service.ActOrderService;
@@ -12,10 +14,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -62,6 +67,28 @@ public class ActOrderController {
         UmsMember currentMember = memberService.getCurrentMember();
         Long memberId = currentMember.getId();
         return CommonResult.success(actOrderService.listOrderActByUser(memberId));
+    }
+
+    @ApiOperation("查询活动订单")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "orderStatus", value = "订单状态", required=false, dataType = "int", paramType = "query")
+    })
+    @GetMapping(value = "/getActOrderList")
+    public CommonResult<List<ActOrderInfoDto>> getActOrderList(@RequestParam Integer orderStatus) {
+        List<ActOrderInfoDto> actOrderInfoDtos = new ArrayList<>();
+        UmsMember currentMember = memberService.getCurrentMember();
+        Long memberId = currentMember.getId();
+        List<ActOrderWithItem> actOrderWithItems = actOrderService.getOrderByStatus(memberId, orderStatus);
+        if (CollectionUtils.isEmpty(actOrderWithItems)) {
+            return CommonResult.success(actOrderInfoDtos);
+        }
+        actOrderWithItems.forEach(actOrderWithItem -> {
+            ActOrderInfoDto actOrderInfoDto = new ActOrderInfoDto();
+            actOrderInfoDto.setOrderWithItem(actOrderWithItem);
+            actOrderInfoDto.setAct(actOrderService.getActById(actOrderWithItem.getActId()));
+            actOrderInfoDtos.add(actOrderInfoDto);
+        });
+        return CommonResult.success(actOrderInfoDtos);
     }
 
     @ApiOperation("用户确认收货")

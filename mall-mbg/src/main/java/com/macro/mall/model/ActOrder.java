@@ -29,7 +29,7 @@ public class ActOrder implements Serializable {
     @ApiModelProperty(value = "支付方式：0->未支付；1->支付宝；2->微信")
     private Integer payType;
 
-    @ApiModelProperty(value = "订单状态：0->待付款；1->待发货；2->已发货；3->已完成；4->已关闭；5->无效订单")
+    @ApiModelProperty(value = "订单状态：0->待付款；1->已报名；3->已完成；4->已关闭；5->无效订单")
     private Integer status;
 
     @ApiModelProperty(value = "收货人姓名")

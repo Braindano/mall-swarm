@@ -1,7 +1,6 @@
 package com.macro.mall.model;
 
 import io.swagger.annotations.ApiModelProperty;
-
 import java.io.Serializable;
 
 public class ActType implements Serializable {
@@ -13,7 +12,7 @@ public class ActType implements Serializable {
     @ApiModelProperty(value = "活动类型icon地址")
     private String typeIcon;
 
-    @ApiModelProperty(value = "排序")
+    @ApiModelProperty(value = "推荐排序")
     private Integer sort;
 
     private static final long serialVersionUID = 1L;
@@ -59,6 +58,7 @@ public class ActType implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", typeName=").append(typeName);
         sb.append(", typeIcon=").append(typeIcon);
+        sb.append(", sort=").append(sort);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

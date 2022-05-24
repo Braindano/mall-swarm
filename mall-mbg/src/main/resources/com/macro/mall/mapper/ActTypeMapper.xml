@@ -66,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, type_name, type_icon, sort, create_time, update_time
+    id, type_name, type_icon, sort
   </sql>
   <select id="selectByExample" parameterType="com.macro.mall.model.ActTypeExample" resultMap="BaseResultMap">
     select
@@ -102,8 +102,10 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into act_type (type_name, type_icon, sort)
-    values (#{typeName,jdbcType=VARCHAR}, #{typeIcon,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER})
+    insert into act_type (type_name, type_icon, sort
+      )
+    values (#{typeName,jdbcType=VARCHAR}, #{typeIcon,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.macro.mall.model.ActType">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -120,12 +122,6 @@
       <if test="sort != null">
         sort,
       </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
-      <if test="updateTime != null">
-        update_time,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="typeName != null">
@@ -136,12 +132,6 @@
       </if>
       <if test="sort != null">
         #{sort,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -166,12 +156,6 @@
       <if test="record.sort != null">
         sort = #{record.sort,jdbcType=INTEGER},
       </if>
-      <if test="record.createTime != null">
-        create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.updateTime != null">
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -182,9 +166,7 @@
     set id = #{record.id,jdbcType=BIGINT},
       type_name = #{record.typeName,jdbcType=VARCHAR},
       type_icon = #{record.typeIcon,jdbcType=VARCHAR},
-      sort = #{record.sort,jdbcType=INTEGER},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+      sort = #{record.sort,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -201,12 +183,6 @@
       <if test="sort != null">
         sort = #{sort,jdbcType=INTEGER},
       </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -214,9 +190,7 @@
     update act_type
     set type_name = #{typeName,jdbcType=VARCHAR},
       type_icon = #{typeIcon,jdbcType=VARCHAR},
-      sort = #{sort,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      sort = #{sort,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

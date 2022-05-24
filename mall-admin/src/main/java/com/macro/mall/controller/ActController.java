@@ -3,6 +3,7 @@ package com.macro.mall.controller;
 import com.macro.mall.common.api.CommonPage;
 import com.macro.mall.common.api.CommonResult;
 import com.macro.mall.model.ActAct;
+import com.macro.mall.model.ActArticle;
 import com.macro.mall.model.ActRecommend;
 import com.macro.mall.model.dto.RecActDto;
 import com.macro.mall.service.ActRecommendService;
@@ -101,5 +102,37 @@ public class ActController {
         List<RecActDto> recActDtoList = recommendService.listRecAct(recType);
         return CommonResult.success(CommonPage.restPage(recActDtoList));
     }
+
+    @ApiOperation("添加活动文章")
+    @PostMapping(value = "/article/add")
+    public CommonResult addArticle(@RequestBody ActArticle article) {
+        return CommonResult.success(actService.addArticle(article));
+    }
+
+    @ApiOperation("修改活动文章")
+    @PostMapping(value = "/article/update")
+    public CommonResult updateArticle(@RequestBody ActArticle article) {
+        return CommonResult.success(actService.updateArticle(article));
+    }
+
+    @ApiOperation("删除活动文章")
+    @PostMapping(value = "/article/delete")
+    public CommonResult updateArticle(@RequestParam("id") Long id) {
+        return CommonResult.success(actService.deleteArticle(id));
+    }
+
+    @ApiOperation("查询活动文章列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "title", value = "文章标题",required=false, dataType = "int", paramType = "query")
+    })
+    @GetMapping(value = "/article/list")
+    public CommonResult<CommonPage<ActArticle>> listArticle(@RequestParam(value = "title", required = false) String title,
+                                    @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                    @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
+        List<ActArticle> actArticles = actService.listArticle(title, pageNum, pageSize);
+        return CommonResult.success(CommonPage.restPage(actArticles));
+    }
+
+
 
 }

@@ -5,6 +5,7 @@ import com.macro.mall.model.ActOrderExample;
 import java.util.List;
 
 import com.macro.mall.model.dto.ActDto;
+import com.macro.mall.model.dto.ActOrderWithItem;
 import org.apache.ibatis.annotations.Param;
 
 public interface ActOrderMapper {
@@ -40,5 +41,16 @@ public interface ActOrderMapper {
      * @return
      */
     List<Long> getMemberIdByActId(Long actId);
+
+    /**
+     * 查询超时订单
+     * @param minute 超时分钟
+     * @return
+     */
+    List<ActOrderWithItem> getTimeOutOrders(@Param("minute") Integer minute);
+
+    void updateOrderStatus(List<Long> ids, Integer status);
+
+    List<ActOrderWithItem> getOrderByStatus(Long memberId, Integer orderStatus);
 
 }

@@ -1,20 +1,16 @@
 package com.macro.mall.portal.controller;
 
 import cn.hutool.json.JSONArray;
-import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.google.gson.JsonObject;
 import com.macro.mall.common.api.CommonPage;
 import com.macro.mall.common.api.CommonResult;
 import com.macro.mall.common.config.ActConstants;
 import com.macro.mall.model.ActAct;
-import com.macro.mall.model.ActClub;
+import com.macro.mall.model.ActArticle;
+import com.macro.mall.model.UmsMember;
 import com.macro.mall.model.dto.ActDto;
 import com.macro.mall.model.dto.Data;
 import com.macro.mall.model.query.ActQuery;
-import com.macro.mall.model.query.RecActQuery;
-import com.macro.mall.portal.domain.act.ActInfoDto;
-import com.macro.mall.portal.feign.ActService;
 import com.macro.mall.portal.service.ActHomeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -24,7 +20,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -86,6 +81,26 @@ public class ActHomeController {
     public CommonResult<ActDto> getActInfo(@RequestParam Long actId) {
         ActDto actDto = actHomeService.getActInfo(actId);
         return CommonResult.success(actDto);
+    }
+
+    @ApiOperation("按获取活动参与人")
+    @RequestMapping(value = "/getActMembers", method = RequestMethod.GET)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "actId", value = "活动id", required=true, dataType = "long", paramType = "query")
+    })
+    @ResponseBody
+    public CommonResult<List<UmsMember>> getActMembers(@RequestParam Long actId) {
+        return CommonResult.success( actHomeService.getActMembers(actId));
+    }
+
+    @ApiOperation("获取活动文章")
+    @RequestMapping(value = "/getActArticle", method = RequestMethod.GET)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "articleId", value = "文章id", required=true, dataType = "long", paramType = "query")
+    })
+    @ResponseBody
+    public CommonResult<ActArticle> getActArticle(@RequestParam Long articleId) {
+        return CommonResult.success(actHomeService.getArticleById(articleId));
     }
 
 
