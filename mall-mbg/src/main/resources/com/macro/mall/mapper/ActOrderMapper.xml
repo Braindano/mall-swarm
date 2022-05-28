@@ -597,7 +597,56 @@
     </where>
   </select>
 
-  <update id="updateOrderStatus">
+    <select id="listOrderWithItem" resultMap="OrderWithItemResultMap">
+      select o.id,
+      o.member_id,
+      o.order_sn,
+      o.member_username,
+      o.total_amount,
+      o.pay_amount,
+      o.promotion_amount,
+      o.pay_type,
+      o.status,
+      o.receiver_name,
+      o.receiver_phone,
+      o.receiver_detail_address,
+      o.confirm_status,
+      o.delete_status,
+      o.payment_time,
+      o.delivery_time,
+      o.express_company,
+      o.express_sn,
+      o.receive_time,
+      o.comment_time,
+      o.create_time,
+      o.update_time as updateTime,
+      oi.act_id as act_id,
+      oi.act_name as act_name,
+      oi.club_id as club_id
+      from act_order o
+      left join act_order_item oi
+      on o.id = oi.order_id
+      <where>
+        <if test="orderSn != null">
+          and o.order_sn = #{orderSn}
+        </if>
+        <if test="orderStatus != null">
+          and o.status = #{orderStatus}
+        </if>
+        <if test="memberId != null">
+          and o.member_id = #{memberId}
+        </if>
+        <if test="clubId != null">
+          and oi.club_id = #{clubId}
+        </if>
+        <if test="actId != null">
+          and oi.act_id = #{actId}
+        </if>
+      </where>
+        order by o.id desc
+    </select>
+
+    <update id="updateOrderStatus">
     update act_order
     set status=#{status}
     where id in

@@ -43,6 +43,13 @@ public interface UmsAdminService {
     List<UmsAdmin> list(String keyword, Integer pageSize, Integer pageNum);
 
     /**
+     * 获取管理员列表
+     * @param adminIds
+     * @return
+     */
+    List<UmsAdmin> listAdminByIds(List<Long> adminIds);
+
+    /**
      * 修改指定用户信息
      */
     int update(Long id, UmsAdmin admin);

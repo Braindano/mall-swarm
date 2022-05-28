@@ -27,6 +27,13 @@
     where user_id = #{userId}
   </select>
 
+    <select id="getByClubId" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List" />
+      from act_admin_club
+      where club_id = #{clubId}
+    </select>
+
   <delete id="deleteByUserIdClubId" parameterType="java.lang.Long">
     delete from act_admin_club
     where user_id = #{userId}

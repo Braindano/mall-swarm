@@ -151,6 +151,14 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     }
 
     @Override
+    public List<UmsAdmin> listAdminByIds(List<Long> adminIds) {
+        UmsAdminExample example = new UmsAdminExample();
+        UmsAdminExample.Criteria criteria = example.createCriteria();
+        criteria.andIdIn(adminIds);
+        return adminMapper.selectByExample(example);
+    }
+
+    @Override
     public int update(Long id, UmsAdmin admin) {
         admin.setId(id);
         UmsAdmin rawAdmin = adminMapper.selectByPrimaryKey(id);

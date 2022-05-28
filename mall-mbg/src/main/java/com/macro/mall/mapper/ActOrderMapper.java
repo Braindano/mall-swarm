@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.macro.mall.model.dto.ActDto;
 import com.macro.mall.model.dto.ActOrderWithItem;
+import com.macro.mall.model.query.ActOrderQuery;
 import org.apache.ibatis.annotations.Param;
 
 public interface ActOrderMapper {
@@ -52,5 +53,12 @@ public interface ActOrderMapper {
     void updateOrderStatus(List<Long> ids, Integer status);
 
     List<ActOrderWithItem> getOrderByStatus(Long memberId, Integer orderStatus);
+
+    /**
+     * 查订单列表
+     * @param actOrderQuery
+     * @return
+     */
+    List<ActOrderWithItem> listOrderWithItem(ActOrderQuery actOrderQuery);
 
 }
