@@ -1,6 +1,7 @@
 package com.macro.mall.model.dto;
 
 import com.macro.mall.model.ActClub;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
@@ -10,10 +11,18 @@ public class ActClubDto extends ActClub {
     /**
      * 活动数
      */
+    @ApiModelProperty("发布的活动数")
     private Integer actCnt;
 
     /**
      * 粉丝数
      */
+    @ApiModelProperty("粉丝数")
     private Integer fansCnt;
+
+    /**
+     * 是否关注
+     */
+    @ApiModelProperty("是否关注")
+    private Boolean focus;
 }

@@ -85,7 +85,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, club_id, act_name, act_type_id, act_type_name, act_pics, start_time, end_time, 
-    address, address_detail, provide_service, latitude, longitude, original_price, promotion_price, 
+    address, address_detail, provide_service, latitude, longitude, original_price, promotion_price,
     max_sale_cnt, inventory, create_time, update_time
   </sql>
   <sql id="Blob_Column_List">
@@ -525,28 +525,30 @@
 
   <select id="listRecAct" resultType="com.macro.mall.model.dto.RecActDto">
     select act.id,
-           act.club_id,
-           act.act_name,
-           act.act_type_id,
-           act.act_type_name,
-           act.act_pics,
-           act.start_time,
-           act.end_time,
+           act.club_id as clubId,
+           act.act_name as actName,
+           act.act_type_id as actTypeId,
+           act.act_type_name as actTypeName,
+           act.act_pics as actPics,
+           act.start_time as startTime,
+           act.end_time as endTime,
            act.address,
-           act.address_detail,
-           act.provide_service,
+           act.address_detail as addressDetail,
+           act.provide_service as provideService,
            act.latitude,
            act.longitude,
-           act.original_price,
-           act.promotion_price,
-           act.max_sale_cnt,
+           act.act_detail as actDetail,
+           act.original_price as originalPrice,
+           act.promotion_price as promotionPrice,
+           act.max_sale_cnt as maxSaleCnt,
            act.inventory,
-           rec.rec_type,
+           rec.id as recommendId,
+           rec.rec_type as recType,
            rec.sort
     from act_act act right join act_recommend rec
     on act.id = rec.act_id
     where rec_type = #{recType}
-    order by sort desc
+    order by sort asc
   </select>
   <select id="listByRecType" resultMap="BaseResultMap">
     select act.id as id, club_id, act_name, act_type_id, act_type_name, act_pics, start_time, end_time, address,
@@ -558,7 +560,7 @@
     where rec_type = #{recType}
     order by rec.sort
   </select>
-  <select id="selectForUpdate" resultType="com.macro.mall.model.ActAct">
+  <select id="selectForUpdate" resultMap="BaseResultMap">
     select <include refid="Base_Column_List"/>
         from act_act
     where id = #{actId}
@@ -567,20 +569,21 @@
 
   <select id="selectOrderActByUser" resultType="com.macro.mall.model.dto.ActDto">
     select a.id,
-           a.club_id,
-           a.act_name,
-           a.act_type_id,
-           a.act_type_name,
-           a.act_pics,
-           a.start_time,
-           a.end_time,
+           a.club_id as clubId,
+           a.act_name as actName,
+           a.act_type_id as actTypeId,
+           a.act_type_name as actTypeName,
+           a.act_pics as actPics,
+           a.start_time as startTime,
+           a.end_time as endTime,
            a.address,
-           a.address_detail,
-           a.provide_service,
+           a.address_detail as addressDetail,
+           a.provide_service as provideService,
            a.latitude,
            a.longitude,
-           a.original_price,
-           a.promotion_price
+           a.act_detail as actDetail,
+           a.original_price as originalPrice,
+           a.promotion_price as promotionPrice
     from act_order o
            LEFT JOIN act_order_item oi
                      on o.id = oi.order_id

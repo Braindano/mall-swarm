@@ -33,4 +33,8 @@ public interface ActClubMapper {
     List<ActClubDto> listByClubIds(List<Long> clubIds);
 
     List<ActClubDto> listClubActNums(List<Long> clubIds);
+
+    ActClubDto getClubInfo(Long clubId);
+
+    Integer getClubActCnt(Long clubId);
 }

@@ -29,5 +29,5 @@ public interface ActUserClubMapper {
 
     int updateByPrimaryKey(ActUserClub record);
 
-
+    ActUserClub getByUserAndClub(Long userId, Long clubId);
 }

@@ -132,6 +132,14 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
+
+  <select id="getByUserAndClub" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from act_user_club
+    where user_id = #{userId}
+    and club_id = #{clubId}
+  </select>
+
   <update id="updateByExampleSelective" parameterType="map">
     update act_user_club
     <set>

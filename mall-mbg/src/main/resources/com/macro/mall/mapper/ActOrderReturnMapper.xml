@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.macro.mall.mapper.ActOrderReturnMapper">
+  <resultMap id="BaseResultMap" type="com.macro.mall.model.ActOrderReturn">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_sn" jdbcType="VARCHAR" property="orderSn" />
+    <result column="act_id" jdbcType="BIGINT" property="actId" />
+    <result column="act_name" jdbcType="VARCHAR" property="actName" />
+    <result column="pay_price" jdbcType="DECIMAL" property="payPrice" />
+    <result column="club_id" jdbcType="BIGINT" property="clubId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="admin_id" jdbcType="BIGINT" property="adminId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, order_sn, act_id, act_name, pay_price, club_id, user_id, status, admin_id, create_time, 
+    update_time
+  </sql>
+  <select id="selectByExample" parameterType="com.macro.mall.model.ActOrderReturnExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from act_order_return
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from act_order_return
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from act_order_return
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.macro.mall.model.ActOrderReturnExample">
+    delete from act_order_return
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.macro.mall.model.ActOrderReturn">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into act_order_return (order_sn, act_id, act_name, 
+      pay_price, club_id, user_id, 
+      status, admin_id, create_time, 
+      update_time)
+    values (#{orderSn,jdbcType=VARCHAR}, #{actId,jdbcType=BIGINT}, #{actName,jdbcType=VARCHAR}, 
+      #{payPrice,jdbcType=DECIMAL}, #{clubId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
+      #{status,jdbcType=INTEGER}, #{adminId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.macro.mall.model.ActOrderReturn">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into act_order_return
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderSn != null">
+        order_sn,
+      </if>
+      <if test="actId != null">
+        act_id,
+      </if>
+      <if test="actName != null">
+        act_name,
+      </if>
+      <if test="payPrice != null">
+        pay_price,
+      </if>
+      <if test="clubId != null">
+        club_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="adminId != null">
+        admin_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderSn != null">
+        #{orderSn,jdbcType=VARCHAR},
+      </if>
+      <if test="actId != null">
+        #{actId,jdbcType=BIGINT},
+      </if>
+      <if test="actName != null">
+        #{actName,jdbcType=VARCHAR},
+      </if>
+      <if test="payPrice != null">
+        #{payPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="clubId != null">
+        #{clubId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="adminId != null">
+        #{adminId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.macro.mall.model.ActOrderReturnExample" resultType="java.lang.Long">
+    select count(*) from act_order_return
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+    <update id="updateByExampleSelective" parameterType="map">
+    update act_order_return
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.orderSn != null">
+        order_sn = #{record.orderSn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actId != null">
+        act_id = #{record.actId,jdbcType=BIGINT},
+      </if>
+      <if test="record.actName != null">
+        act_name = #{record.actName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payPrice != null">
+        pay_price = #{record.payPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.clubId != null">
+        club_id = #{record.clubId,jdbcType=BIGINT},
+      </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=BIGINT},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.adminId != null">
+        admin_id = #{record.adminId,jdbcType=BIGINT},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update act_order_return
+    set id = #{record.id,jdbcType=BIGINT},
+      order_sn = #{record.orderSn,jdbcType=VARCHAR},
+      act_id = #{record.actId,jdbcType=BIGINT},
+      act_name = #{record.actName,jdbcType=VARCHAR},
+      pay_price = #{record.payPrice,jdbcType=DECIMAL},
+      club_id = #{record.clubId,jdbcType=BIGINT},
+      user_id = #{record.userId,jdbcType=BIGINT},
+      status = #{record.status,jdbcType=INTEGER},
+      admin_id = #{record.adminId,jdbcType=BIGINT},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.macro.mall.model.ActOrderReturn">
+    update act_order_return
+    <set>
+      <if test="orderSn != null">
+        order_sn = #{orderSn,jdbcType=VARCHAR},
+      </if>
+      <if test="actId != null">
+        act_id = #{actId,jdbcType=BIGINT},
+      </if>
+      <if test="actName != null">
+        act_name = #{actName,jdbcType=VARCHAR},
+      </if>
+      <if test="payPrice != null">
+        pay_price = #{payPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="clubId != null">
+        club_id = #{clubId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="adminId != null">
+        admin_id = #{adminId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.macro.mall.model.ActOrderReturn">
+    update act_order_return
+    set order_sn = #{orderSn,jdbcType=VARCHAR},
+      act_id = #{actId,jdbcType=BIGINT},
+      act_name = #{actName,jdbcType=VARCHAR},
+      pay_price = #{payPrice,jdbcType=DECIMAL},
+      club_id = #{clubId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      status = #{status,jdbcType=INTEGER},
+      admin_id = #{adminId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="listByQuery" resultMap="BaseResultMap" >
+    select  <include refid="Base_Column_List" />
+    from act_order_return
+    <where>
+      <if test="orderSn != null and orderSn != ''" >
+        and order_sn = #{orderSn}
+      </if>
+      <if test="actId != null">
+        and act_id = #{actId}
+      </if>
+      <if test="actName != null and actName != ''">
+        and act_name = #{actName}
+      </if>
+      <if test="clubId != null">
+        and club_id = #{clubId}
+      </if>
+      <if test="userId != null">
+        and user_id = #{userId}
+      </if>
+    </where>
+    order by id desc
+  </select>
+
+</mapper>

@@ -228,10 +228,10 @@
   <select id="listByClubIds" resultType="com.macro.mall.model.dto.ActClubDto">
     select c.id,
            name,
-           background_img,
-           logo_img,
+           background_img as backgroundImg,
+           logo_img as logoImg,
            introduce,
-           club_pics,
+           club_pics as clubPics,
            count(1) as fansCnt
     from act_user_club uc
     LEFT JOIN act_club c
@@ -251,6 +251,26 @@
       #{clubId}
     </foreach>
     group by club_id
+  </select>
+
+    <select id="getClubInfo" resultType="com.macro.mall.model.dto.ActClubDto">
+      select c.id,
+             name,
+             background_img as backgroundImg,
+             logo_img as logoImg,
+             introduce,
+             club_pics as clubPics,
+             count(1) as fansCnt
+      from act_user_club uc
+      LEFT JOIN act_club c
+           on uc.club_id = c.id
+      where club_id = #{clubId}
+    </select>
+
+  <select id="getClubActCnt" resultType="java.lang.Integer">
+    select count(1)
+    from act_act
+    where club_id = #{clubId}
   </select>
 
 </mapper>
