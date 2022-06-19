@@ -2,6 +2,7 @@ package com.macro.mall.portal.service;
 
 import com.macro.mall.model.ActAct;
 import com.macro.mall.model.ActArticle;
+import com.macro.mall.model.ActType;
 import com.macro.mall.model.UmsMember;
 import com.macro.mall.model.dto.ActClubDto;
 import com.macro.mall.model.dto.ActDto;
@@ -32,6 +33,14 @@ public interface ActHomeService {
      */
     ActDto getActInfo(Long actId);
 
+    /**
+     * 获取俱乐部信息
+     * @param clubId
+     * @return
+     */
+    ActClubDto getClubInfo(Long clubId, String token);
+
+
     List<UmsMember> getActMembers(Long actId);
 
     /**
@@ -54,4 +63,10 @@ public interface ActHomeService {
      * @return
      */
     ActArticle getArticleById(Long articleId);
+
+    /**
+     * 获取活动类型
+     * @return
+     */
+    List<ActType> listActType();
 }

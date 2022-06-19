@@ -3,8 +3,10 @@ package com.macro.mall.controller;
 import com.macro.mall.common.api.CommonPage;
 import com.macro.mall.common.api.CommonResult;
 import com.macro.mall.model.ActAct;
+import com.macro.mall.model.ActOrderReturn;
 import com.macro.mall.model.dto.ActOrderWithItem;
 import com.macro.mall.model.query.ActOrderQuery;
+import com.macro.mall.model.query.ActOrderReturnQuery;
 import com.macro.mall.service.ActOrderService;
 import com.macro.mall.service.ActService;
 import io.swagger.annotations.Api;
@@ -37,6 +39,14 @@ public class ActOrderController {
         List<ActOrderWithItem> actOrderWithItems = orderService.listOrder(actOrderQuery);
         return CommonResult.success(CommonPage.restPage(actOrderWithItems));
     }
+
+    @ApiOperation("查询活动退单列表")
+    @RequestMapping(value = "/return/list", method = RequestMethod.POST)
+    public CommonResult<CommonPage<ActOrderReturn>> returnOrderList(@RequestBody ActOrderReturnQuery query) {
+        List<ActOrderReturn> actOrderReturns = orderService.listOrderReturn(query);
+        return CommonResult.success(CommonPage.restPage(actOrderReturns));
+    }
+
 
 
 }

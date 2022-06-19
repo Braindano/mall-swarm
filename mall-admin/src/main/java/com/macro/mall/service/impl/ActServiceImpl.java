@@ -31,7 +31,7 @@ public class ActServiceImpl implements ActService {
 
     @Override
     public int update(ActAct act) {
-        return actMapper.updateByPrimaryKey(act);
+        return actMapper.updateByPrimaryKeyWithBLOBs(act);
     }
 
     @Override
@@ -45,7 +45,6 @@ public class ActServiceImpl implements ActService {
     }
 
     @Override
-
     public List<ActAct> listAct(Long clubId, Long actTypeId, Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         ActActExample example = new ActActExample();
@@ -57,7 +56,7 @@ public class ActServiceImpl implements ActService {
             criteria.andActTypeIdEqualTo(actTypeId);
         }
         example.setOrderByClause("id desc");
-        return actMapper.selectByExample(example);
+        return actMapper.selectByExampleWithBLOBs(example);
     }
 
     @Override
@@ -67,7 +66,7 @@ public class ActServiceImpl implements ActService {
 
     @Override
     public int updateArticle(ActArticle article) {
-        return actArticleMapper.updateByPrimaryKey(article);
+        return actArticleMapper.updateByPrimaryKeyWithBLOBs(article);
     }
 
     @Override
@@ -84,5 +83,10 @@ public class ActServiceImpl implements ActService {
             criteria.andTitleLike("%" + title + "%");
         }
         return actArticleMapper.selectByExampleWithBLOBs(example);
+    }
+
+    @Override
+    public ActArticle getArticle(Long id) {
+        return actArticleMapper.selectByPrimaryKey(id);
     }
 }

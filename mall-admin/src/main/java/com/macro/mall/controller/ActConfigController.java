@@ -48,8 +48,8 @@ public class ActConfigController {
 
     @ApiOperation("查询配置列表")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public CommonResult<List<ActConfig>> list(@RequestBody ActConfigExample example) {
-        List<ActConfig> actConfigs = configService.listConfig(example);
+    public CommonResult<List<ActConfig>> list() {
+        List<ActConfig> actConfigs = configService.listConfig();
         return CommonResult.success(actConfigs);
     }
 

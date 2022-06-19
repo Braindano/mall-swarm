@@ -15,6 +15,8 @@ public interface ActConfigService {
 
     ActConfig selectById(Long id);
 
-    List<ActConfig> listConfig(ActConfigExample example);
+    ActConfig selectByConfigCode(String configCode);
+
+    List<ActConfig> listConfig();
 
 }

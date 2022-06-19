@@ -34,9 +34,9 @@ public class UmsMemberReceiveAddressController {
     }
 
     @ApiOperation("删除收货地址")
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
-    public CommonResult delete(@PathVariable Long id) {
+    public CommonResult delete(@RequestParam Long id) {
         int count = memberReceiveAddressService.delete(id);
         if (count > 0) {
             return CommonResult.success(count);
@@ -45,10 +45,10 @@ public class UmsMemberReceiveAddressController {
     }
 
     @ApiOperation("修改收货地址")
-    @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
-    public CommonResult update(@PathVariable Long id, @RequestBody UmsMemberReceiveAddress address) {
-        int count = memberReceiveAddressService.update(id, address);
+    public CommonResult update(@RequestBody UmsMemberReceiveAddress address) {
+        int count = memberReceiveAddressService.update(address.getId(), address);
         if (count > 0) {
             return CommonResult.success(count);
         }
@@ -64,9 +64,9 @@ public class UmsMemberReceiveAddressController {
     }
 
     @ApiOperation("获取收货地址详情")
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "", method = RequestMethod.GET)
     @ResponseBody
-    public CommonResult<UmsMemberReceiveAddress> getItem(@PathVariable Long id) {
+    public CommonResult<UmsMemberReceiveAddress> getItem(@RequestParam Long id) {
         UmsMemberReceiveAddress address = memberReceiveAddressService.getItem(id);
         return CommonResult.success(address);
     }

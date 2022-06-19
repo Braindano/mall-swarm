@@ -88,8 +88,8 @@ public class ActController {
 
     @ApiOperation("删除活动推荐")
     @RequestMapping(value = "/recommend/delete", method = RequestMethod.GET)
-    public CommonResult deleteRecommend(Long id) {
-        int update = recommendService.delete(id);
+    public CommonResult deleteRecommend(Long recommendId) {
+        int update = recommendService.delete(recommendId);
         return CommonResult.success(update);
     }
 
@@ -116,7 +116,7 @@ public class ActController {
     }
 
     @ApiOperation("删除活动文章")
-    @PostMapping(value = "/article/delete")
+    @GetMapping(value = "/article/delete")
     public CommonResult updateArticle(@RequestParam("id") Long id) {
         return CommonResult.success(actService.deleteArticle(id));
     }
@@ -133,6 +133,11 @@ public class ActController {
         return CommonResult.success(CommonPage.restPage(actArticles));
     }
 
-
+    @ApiOperation("查询活动文章详情")
+    @GetMapping(value = "/article/detail")
+    public CommonResult<ActArticle> listArticle(@RequestParam("id") Long id) {
+        ActArticle actArticle = actService.getArticle(id);
+        return CommonResult.success(actArticle);
+    }
 
 }

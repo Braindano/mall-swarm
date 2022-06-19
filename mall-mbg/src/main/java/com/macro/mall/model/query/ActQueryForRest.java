@@ -27,6 +27,9 @@ ActQueryForRest implements Serializable {
         return actQuery;
     }
 
+    @ApiModelProperty(value = "俱乐部id")
+    private Long clubId;
+
     /**
      * 活动类型
      */
@@ -107,5 +110,13 @@ ActQueryForRest implements Serializable {
 
     public void setQueryEndTime(Long queryEndTime) {
         this.queryEndTime = queryEndTime;
+    }
+
+    public Long getClubId() {
+        return clubId;
+    }
+
+    public void setClubId(Long clubId) {
+        this.clubId = clubId;
     }
 }

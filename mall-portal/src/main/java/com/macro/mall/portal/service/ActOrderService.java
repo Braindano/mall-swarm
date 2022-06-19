@@ -3,6 +3,7 @@ package com.macro.mall.portal.service;
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.macro.mall.model.ActAct;
 import com.macro.mall.model.ActOrder;
+import com.macro.mall.model.ActOrderReturn;
 import com.macro.mall.model.dto.ActDto;
 import com.macro.mall.model.dto.ActOrderWithItem;
 import com.macro.mall.portal.domain.act.ActConfirmOrderResult;
@@ -35,14 +36,14 @@ public interface ActOrderService {
      * @param orderId
      * @param request
      */
-    WxPayMpOrderResult prepay(Long orderId, HttpServletRequest request);
+    WxPayMpOrderResult prepay(String orderId, HttpServletRequest request);
 
     /**
      * 支付成功回调
-     * @param orderId 订单id
+     * @param orderSn 订单流水号
      * @return
      */
-    Integer paySuccess(Long orderId);
+    Integer paySuccess(String orderSn);
 
     /**
      * 获取用户订单记录
@@ -78,5 +79,24 @@ public interface ActOrderService {
      */
     List<ActOrderWithItem> getOrderByStatus(Long memberId, Integer orderStatus);
 
+    ActOrderWithItem getOrderByOrderSn(String orderSn);
+
     ActAct getActById(Long actId);
+
+    /**
+     * 活动退单申请
+     * @param actOrderReturn
+     * @return
+     */
+    Integer orderReturn(ActOrderReturn actOrderReturn);
+
+
+    /**
+     * 查询退单申请
+     * @param orderSn
+     * @param userId
+     * @param status
+     * @return
+     */
+    List<ActOrderReturn>  getOrderReturn(String orderSn, Long userId, Integer status);
 }

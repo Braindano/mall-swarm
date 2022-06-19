@@ -49,7 +49,7 @@ public class ActTypeServiceImpl implements ActTypeService {
         if (StringUtils.isNotBlank(typeName)){
             example.createCriteria().andTypeNameLike("%" + typeName + "%");
         }
-        example.setOrderByClause("sort desc");
+        example.setOrderByClause("sort asc");
         return actTypeMapper.selectByExample(example);
     }
 }

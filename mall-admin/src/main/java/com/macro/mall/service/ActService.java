@@ -25,4 +25,5 @@ public interface ActService {
 
     List<ActArticle> listArticle(String title, Integer pageNum, Integer pageSize);
 
+    ActArticle getArticle(Long id);
 }

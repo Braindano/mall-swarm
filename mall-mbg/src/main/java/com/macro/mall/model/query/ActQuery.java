@@ -12,6 +12,9 @@ public class
 ActQuery implements Serializable {
     private static final long serialVersionUID = 6641181777696003632L;
 
+    @ApiModelProperty(value = "俱乐部id")
+    private Long clubId;
+
     /**
      * 活动类型
      */
@@ -94,5 +97,13 @@ ActQuery implements Serializable {
 
     public void setQueryEndTime(Date queryEndTime) {
         this.queryEndTime = queryEndTime;
+    }
+
+    public Long getClubId() {
+        return clubId;
+    }
+
+    public void setClubId(Long clubId) {
+        this.clubId = clubId;
     }
 }

@@ -22,7 +22,7 @@ public class ActConfigServiceImpl implements ActConfigService {
 
     @Override
     public int update(ActConfig config) {
-        return actConfigMapper.updateByPrimaryKey(config);
+        return actConfigMapper.updateByPrimaryKeyWithBLOBs(config);
     }
 
     @Override
@@ -36,7 +36,13 @@ public class ActConfigServiceImpl implements ActConfigService {
     }
 
     @Override
-    public List<ActConfig> listConfig(ActConfigExample example) {
+    public ActConfig selectByConfigCode(String configCode) {
+        return actConfigMapper.getByConfigCode(configCode);
+    }
+
+    @Override
+    public List<ActConfig> listConfig() {
+        ActConfigExample example = new ActConfigExample();
         return actConfigMapper.selectByExample(example);
     }
 }

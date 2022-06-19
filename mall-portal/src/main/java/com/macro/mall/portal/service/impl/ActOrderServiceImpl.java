@@ -8,32 +8,32 @@ import com.macro.mall.common.config.ActOrderConstants;
 import com.macro.mall.common.exception.ApiException;
 import com.macro.mall.common.exception.Asserts;
 import com.macro.mall.common.service.RedisService;
-import com.macro.mall.mapper.ActActMapper;
-import com.macro.mall.mapper.ActOrderItemMapper;
-import com.macro.mall.mapper.ActOrderMapper;
-import com.macro.mall.mapper.OmsOrderSettingMapper;
+import com.macro.mall.mapper.*;
 import com.macro.mall.model.*;
 import com.macro.mall.model.dto.ActDto;
 import com.macro.mall.model.dto.ActOrderWithItem;
+import com.macro.mall.model.query.ActOrderQuery;
 import com.macro.mall.portal.dao.UmsMemberWxDao;
-import com.macro.mall.portal.domain.OmsOrderDetail;
 import com.macro.mall.portal.domain.UmsMemberWx;
 import com.macro.mall.portal.domain.act.ActConfirmOrderResult;
 import com.macro.mall.portal.domain.act.ActOrderParam;
 import com.macro.mall.portal.service.ActOrderService;
 import com.macro.mall.portal.service.UmsMemberService;
 import com.macro.mall.portal.util.IpUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+import javafx.stage.Screen;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,6 +63,9 @@ public class ActOrderServiceImpl implements ActOrderService {
 
     @Resource
     private OmsOrderSettingMapper orderSettingMapper;
+
+    @Resource
+    private ActOrderReturnMapper orderReturnMapper;
 
     @Value("${redis.key.orderId}")
     private String REDIS_KEY_ORDER_ID;
@@ -98,11 +101,10 @@ public class ActOrderServiceImpl implements ActOrderService {
 
         // 2、扣减库存
         actAct.setInventory(actAct.getInventory() - 1);
-        actMapper.updateByPrimaryKey(actAct);
+        actMapper.updateByPrimaryKeySelective(actAct);
 
         // 3、生成订单信息
         ActOrder order = new ActOrder();
-        order.setPayAmount(actAct.getPromotionPrice());
 
         //转化为订单信息并插入数据库
         order.setMemberId(currentMember.getId());
@@ -119,6 +121,11 @@ public class ActOrderServiceImpl implements ActOrderService {
         //0->未确认；1->已确认
         order.setConfirmStatus(0);
         order.setDeleteStatus(0);
+        // 记录价格
+        order.setTotalAmount(actAct.getOriginalPrice());
+        order.setPromotionAmount(actAct.getOriginalPrice().subtract(actAct.getPromotionPrice()));
+        order.setPayAmount(actAct.getPromotionPrice());
+
         //生成订单号
         order.setOrderSn(generateOrderSn(order));
         //插入order表和order_item表
@@ -134,8 +141,7 @@ public class ActOrderServiceImpl implements ActOrderService {
         orderItemMapper.insert(item);
 
         //发送延迟消息取消订单
-//        sendDelayMessageCancelOrder(order.getId());
-        // todo 定时任务清理未完成订单
+        //定时任务清理未完成订单
 
         Map<String, Object> result = new HashMap<>();
         result.put("order", order);
@@ -144,10 +150,10 @@ public class ActOrderServiceImpl implements ActOrderService {
     }
 
     @Override
-    public WxPayMpOrderResult prepay(Long orderId, HttpServletRequest request) {
+    public WxPayMpOrderResult prepay(String orderSn, HttpServletRequest request) {
         UmsMember currentMember = memberService.getCurrentMember();
         Long memberId = currentMember.getId();
-        ActOrder order = orderMapper.selectByPrimaryKey(orderId);
+        ActOrder order = orderMapper.selectByOrderSn(orderSn);
         if (order == null) {
             throw new ApiException("订单不存在");
         }
@@ -180,10 +186,11 @@ public class ActOrderServiceImpl implements ActOrderService {
     }
 
     @Override
-    public Integer paySuccess(Long orderId) {
+    public Integer paySuccess(String orderSn) {
+        ActOrder actOrder = orderMapper.selectByOrderSn(orderSn);
         //修改订单支付状态
         ActOrder order = new ActOrder();
-        order.setId(orderId);
+        order.setId(actOrder.getId());
         order.setStatus(1);
         order.setPaymentTime(new Date());
         return orderMapper.updateByPrimaryKeySelective(order);
@@ -254,7 +261,33 @@ public class ActOrderServiceImpl implements ActOrderService {
     }
 
     @Override
+    public ActOrderWithItem getOrderByOrderSn(String orderSn) {
+        ActOrderQuery actOrderQuery = new ActOrderQuery();
+        actOrderQuery.setOrderSn(orderSn);
+        List<ActOrderWithItem> actOrderWithItems = orderMapper.listOrderWithItem(actOrderQuery);
+        if (CollectionUtils.isNotEmpty(actOrderWithItems)) {
+            return actOrderWithItems.get(0);
+        }
+        return null;
+    }
+
+    @Override
     public ActAct getActById(Long actId) {
         return actMapper.selectByPrimaryKey(actId);
+    }
+
+    @Override
+    public Integer orderReturn(ActOrderReturn actOrderReturn) {
+        return orderReturnMapper.insertSelective(actOrderReturn);
+    }
+
+    @Override
+    public List<ActOrderReturn> getOrderReturn(String orderSn, Long userId, Integer status) {
+        ActOrderReturnExample example = new ActOrderReturnExample();
+        ActOrderReturnExample.Criteria criteria = example.createCriteria();
+        criteria.andOrderSnEqualTo(orderSn);
+        criteria.andStatusEqualTo(status);
+        criteria.andUserIdEqualTo(userId);
+        return orderReturnMapper.selectByExample(example);
     }
 }

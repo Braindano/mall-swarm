@@ -24,6 +24,8 @@ public interface ActOrderMapper {
 
     ActOrder selectByPrimaryKey(Long id);
 
+    ActOrder selectByOrderSn(String id);
+
     int updateByExampleSelective(@Param("record") ActOrder record, @Param("example") ActOrderExample example);
 
     int updateByExample(@Param("record") ActOrder record, @Param("example") ActOrderExample example);

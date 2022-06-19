@@ -2,18 +2,29 @@ package com.macro.mall.portal.service.impl;
 
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.github.pagehelper.PageHelper;
+import com.macro.mall.common.api.ResultCode;
+import com.macro.mall.common.constant.AuthConstant;
+import com.macro.mall.common.domain.UserDto;
+import com.macro.mall.common.exception.Asserts;
 import com.macro.mall.mapper.*;
 import com.macro.mall.model.*;
 import com.macro.mall.model.dto.ActClubDto;
 import com.macro.mall.model.dto.ActDto;
 import com.macro.mall.model.query.ActQuery;
 import com.macro.mall.portal.service.ActHomeService;
+import com.macro.mall.portal.service.UmsMemberService;
+import com.nimbusds.jose.JWSObject;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,14 +50,26 @@ public class ActHomeServiceImpl implements ActHomeService {
     private UmsMemberMapper memberMapper;
 
     @Resource
+    private ActTypeMapper actTypeMapper;
+
+    @Resource
     private ActArticleMapper articleMapper;
+
+    @Resource
+    private UmsMemberService memberService;
+
+    @Resource
+    private HttpServletRequest request;
 
     @Override
     public List<ActAct> getActList(ActQuery query) {
         PageHelper.startPage(query.getPageNum(), query.getPageSize());
         ActActExample example = new ActActExample();
         ActActExample.Criteria criteria = example.createCriteria();
-        if (!StringUtils.isEmpty(query.getActTypeId())) {
+        if (Objects.nonNull(query.getClubId())) {
+            criteria.andClubIdEqualTo(query.getClubId());
+        }
+        if (Objects.nonNull(query.getActTypeId())) {
             criteria.andActTypeIdEqualTo(query.getActTypeId());
         }
         if (Objects.nonNull(query.getActName())) {
@@ -88,6 +111,30 @@ public class ActHomeServiceImpl implements ActHomeService {
         return actDto;
     }
 
+
+    @Override
+    public ActClubDto getClubInfo(Long clubId, String token) {
+        ActClubDto clubInfo = clubMapper.getClubInfo(clubId);
+        clubInfo.setActCnt(clubMapper.getClubActCnt(clubId));
+        clubInfo.setFocus(Boolean.FALSE);
+
+        if (StringUtils.isNotEmpty(token)) {
+            try {
+                JWSObject jwsObject = JWSObject.parse(token);
+                String userStr = jwsObject.getPayload().toString();
+                UserDto userDto = JSONUtil.toBean(userStr, UserDto.class);
+                Long memberId = userDto.getId();
+                ActUserClub userClub = userClubMapper.getByUserAndClub(memberId, clubId);
+                if (Objects.nonNull(userClub)) {
+                    clubInfo.setFocus(Boolean.TRUE);
+                }
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return clubInfo;
+    }
+
     @Override
     public List<UmsMember> getActMembers(Long actId) {
         List<Long> memberIds = orderMapper.getMemberIdByActId(actId);
@@ -124,5 +171,12 @@ public class ActHomeServiceImpl implements ActHomeService {
     @Override
     public ActArticle getArticleById(Long articleId) {
         return articleMapper.selectByPrimaryKey(articleId);
+    }
+
+    @Override
+    public List<ActType> listActType() {
+        ActTypeExample example = new ActTypeExample();
+        example.setOrderByClause("sort asc");
+        return actTypeMapper.selectByExample(example);
     }
 }

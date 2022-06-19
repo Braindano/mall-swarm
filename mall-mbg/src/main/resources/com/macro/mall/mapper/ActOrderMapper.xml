@@ -103,12 +103,21 @@
       order by ${orderByClause}
     </if>
   </select>
+
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from act_order
     where id = #{id,jdbcType=BIGINT}
   </select>
+
+  <select id="selectByOrderSn" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from act_order
+    where order_sn = #{orderSn}
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from act_order
     where id = #{id,jdbcType=BIGINT}
