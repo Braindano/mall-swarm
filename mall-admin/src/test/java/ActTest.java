@@ -1,9 +1,13 @@
+import cn.hutool.json.JSONUtil;
+import com.google.common.collect.Lists;
 import com.macro.mall.mapper.ActActMapper;
 import com.macro.mall.model.ActAct;
+import com.macro.mall.model.dto.HomeBanner;
 import org.junit.Test;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class ActTest extends BaseTest{
@@ -33,4 +37,22 @@ public class ActTest extends BaseTest{
         actActMapper.insert(act);
     }
 
+    @Test
+    public void testJson(){
+        HomeBanner b1 = new HomeBanner();
+        b1.setImgUrl("http://act-info.oss-cn-hangzhou.aliyuncs.com/mall/images/20220603/22.png");
+        b1.setHrefUrl("aaa");
+        HomeBanner b2 = new HomeBanner();
+        b2.setImgUrl("http://act-info.oss-cn-hangzhou.aliyuncs.com/mall/images/20220603/22.png");
+        b2.setHrefUrl("aaa");
+        HomeBanner b3 = new HomeBanner();
+        b3.setImgUrl("http://act-info.oss-cn-hangzhou.aliyuncs.com/mall/images/20220603/22.png");
+        b3.setHrefUrl("aaa");
+        HomeBanner b4 = new HomeBanner();
+        b4.setImgUrl("http://act-info.oss-cn-hangzhou.aliyuncs.com/mall/images/20220603/22.png");
+        b4.setHrefUrl("aaa");
+        ArrayList<HomeBanner> homeBanners = Lists.newArrayList(b1, b2, b3, b4);
+        String s = JSONUtil.toJsonStr(homeBanners).toString();
+        System.err.println(s);
+    }
 }

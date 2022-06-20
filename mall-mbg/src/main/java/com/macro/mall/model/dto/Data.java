@@ -23,8 +23,8 @@ public class Data implements Serializable {
     /**
      * 轮播图链接
      */
-    @ApiModelProperty(value = "轮播图链接")
-    private List<String> banner;
+    @ApiModelProperty(value = "轮播图对象列表")
+    private List<HomeBanner> banner;
 
     /**
      * 轮播提醒文字
@@ -58,11 +58,11 @@ public class Data implements Serializable {
         this.actTypeList = actTypeList;
     }
 
-    public List<String> getBanner() {
+    public List<HomeBanner> getBanner() {
         return banner;
     }
 
-    public void setBanner(List<String> banner) {
+    public void setBanner(List<HomeBanner> banner) {
         this.banner = banner;
     }
 

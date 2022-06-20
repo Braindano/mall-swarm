@@ -1,5 +1,8 @@
 package com.macro.mall.portal.controller;
 
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.macro.mall.common.api.CommonPage;
 import com.macro.mall.common.api.CommonResult;
@@ -14,6 +17,7 @@ import com.macro.mall.model.UmsMember;
 import com.macro.mall.model.dto.ActClubDto;
 import com.macro.mall.model.dto.ActDto;
 import com.macro.mall.model.dto.Data;
+import com.macro.mall.model.dto.HomeBanner;
 import com.macro.mall.model.query.ActQuery;
 import com.macro.mall.model.query.ActQueryForRest;
 import com.macro.mall.portal.feign.FeignAdminService;
@@ -28,6 +32,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,8 +64,13 @@ public class ActHomeController {
     @ResponseBody
     public CommonResult<Data> content() {
         Data data = new Data();
-        String[] bannerArr = actHomeService.getConfig(ActConstants.ACT_CONFIG_BANNER).split(",");
-        data.setBanner(Lists.newArrayList(bannerArr));
+        String bannerJsonStr = actHomeService.getConfig(ActConstants.ACT_CONFIG_BANNER);
+        if (bannerJsonStr != null) {
+            List<HomeBanner> list = JSONObject.parseArray(bannerJsonStr, HomeBanner.class);
+            data.setBanner(list);
+        } else {
+            data.setBanner(new ArrayList<>());
+        }
         data.setActTypeList(actHomeService.listActType());
         String[] noticeArr = actHomeService.getConfig(ActConstants.ACT_CONFIG_NOTICE).split(",");
         data.setNoticeList(Lists.newArrayList(noticeArr));

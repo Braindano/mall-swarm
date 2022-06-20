@@ -60,4 +60,11 @@ public class ActConfigController {
         return CommonResult.success(ActConfig);
     }
 
+    @ApiOperation("根据configCode查询配置详情")
+    @RequestMapping(value = "/getDetailByCode", method = RequestMethod.GET)
+    public CommonResult<ActConfig> getDetailByCode(String configCode) {
+        ActConfig ActConfig = configService.selectByConfigCode(configCode);
+        return CommonResult.success(ActConfig);
+    }
+
 }
