@@ -53,6 +53,9 @@ public class ActAct implements Serializable {
     @ApiModelProperty(value = "最大售卖数量")
     private Integer maxSaleCnt;
 
+    @ApiModelProperty(value = "报名人数(售卖数量)")
+    private Integer saleCnt;
+
     @ApiModelProperty(value = "库存")
     private Integer inventory;
 
@@ -193,6 +196,14 @@ public class ActAct implements Serializable {
 
     public void setMaxSaleCnt(Integer maxSaleCnt) {
         this.maxSaleCnt = maxSaleCnt;
+    }
+
+    public Integer getSaleCnt() {
+        return saleCnt;
+    }
+
+    public void setSaleCnt(Integer saleCnt) {
+        this.saleCnt = saleCnt;
     }
 
     public Integer getInventory() {

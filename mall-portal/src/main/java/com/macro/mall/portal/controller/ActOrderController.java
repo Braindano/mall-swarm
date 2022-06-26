@@ -61,8 +61,8 @@ public class ActOrderController {
 
     @ApiOperation("微信预支付")
     @PostMapping("prepay")
-    public WxPayMpOrderResult prepay(@RequestBody String orderSn, HttpServletRequest request) {
-        return actOrderService.prepay(orderSn, request);
+    public CommonResult<WxPayMpOrderResult> prepay(@RequestBody String orderSn, HttpServletRequest request) {
+        return CommonResult.success(actOrderService.prepay(orderSn, request));
     }
 
     @ApiOperation("用户支付成功的回调")

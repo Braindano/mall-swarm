@@ -27,4 +27,6 @@ public interface ActOrderItemMapper {
     int updateByPrimaryKeySelective(ActOrderItem record);
 
     int updateByPrimaryKey(ActOrderItem record);
+
+    ActOrderItem selectByOrderSn(String orderSn);
 }

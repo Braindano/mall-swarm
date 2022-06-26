@@ -18,6 +18,7 @@
     <result column="original_price" jdbcType="DECIMAL" property="originalPrice" />
     <result column="promotion_price" jdbcType="DECIMAL" property="promotionPrice" />
     <result column="max_sale_cnt" jdbcType="INTEGER" property="maxSaleCnt" />
+    <result column="sale_cnt" jdbcType="INTEGER" property="saleCnt" />
     <result column="inventory" jdbcType="INTEGER" property="inventory" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -522,8 +523,14 @@
       where act_type_id = #{actTypeId}
     </update>
 
+    <update id="incSaleCnt">
+      update act_act
+      set sale_cnt = sale_cnt + 1
+      where id = #{id}
+    </update>
 
-  <select id="listRecAct" resultType="com.macro.mall.model.dto.RecActDto">
+
+    <select id="listRecAct" resultType="com.macro.mall.model.dto.RecActDto">
     select act.id,
            act.club_id as clubId,
            act.act_name as actName,
@@ -553,7 +560,7 @@
   <select id="listByRecType" resultMap="BaseResultMap">
     select act.id as id, club_id, act_name, act_type_id, act_type_name, act_pics, start_time, end_time, address,
            address_detail, provide_service, latitude, longitude, original_price, promotion_price,
-           max_sale_cnt, inventory
+           max_sale_cnt, sale_cnt, inventory
     from act_recommend rec
     left join act_act act
         on rec.act_id = act.id

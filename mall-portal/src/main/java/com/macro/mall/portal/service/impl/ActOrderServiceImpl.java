@@ -193,6 +193,11 @@ public class ActOrderServiceImpl implements ActOrderService {
         order.setId(actOrder.getId());
         order.setStatus(1);
         order.setPaymentTime(new Date());
+
+        //报名用户+1
+        ActOrderItem item = orderItemMapper.selectByOrderSn(orderSn);
+        actMapper.incSaleCnt(item.getActId());
+
         return orderMapper.updateByPrimaryKeySelective(order);
     }
 

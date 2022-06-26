@@ -134,7 +134,7 @@ public class ActHomeController {
         return CommonResult.success(actClubDto);
     }
 
-    @ApiOperation("按获取活动参与人")
+    @ApiOperation("获取活动参与人")
     @RequestMapping(value = "/getActMembers", method = RequestMethod.GET)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "actId", value = "活动id", required=true, dataType = "long", paramType = "query")

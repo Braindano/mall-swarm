@@ -47,5 +47,12 @@ public interface ActActMapper {
 
     List<ActDto> selectOrderActByUser(Long memberId);
 
+    /**
+     * 活动售卖数+1
+     * @param id
+     * @return
+     */
+    int incSaleCnt(Long id);
+
 
 }
